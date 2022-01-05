@@ -1,3 +1,5 @@
+import 'package:app/widgets/global/background.dart';
+import 'package:app/widgets/global/logo.dart';
 import 'package:flutter/material.dart';
 import 'package:app/widgets/navbar/navigation_bar.dart';
 
@@ -11,6 +13,7 @@ class AppView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
+        const Background(),
         Scaffold(
           backgroundColor: Colors.transparent,
           body: Stack(
@@ -21,6 +24,7 @@ class AppView extends StatelessWidget {
                   Expanded(child: child),
                 ],
               ),
+              const LogoIPE(),
             ],
           ),
         ),
