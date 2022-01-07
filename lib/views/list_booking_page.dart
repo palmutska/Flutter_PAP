@@ -15,46 +15,47 @@ class ListPage extends StatefulWidget {
 class _ListPageState extends State<ListPage> {
   @override
   Widget build(BuildContext context) {
-    //TODO Deixar + bonito
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
+    return Stack(
+      alignment: Alignment.center,
       children: [
-        FutureBuilder<List>(
-          future: _getBooking(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return const Text(
-                "Não tem nenhuma marcação!",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 30,
-                ),
-              );
-            }
-            if (snapshot.connectionState == ConnectionState.done) {
-              var myList = snapshot.data!;
-              return DataTable(
-                border: TableBorder.all(),
-                dividerThickness: 3,
-                dataRowColor: MaterialStateProperty.all(Colors.white),
-                headingRowColor:
-                    MaterialStateProperty.all(Colors.lightBlueAccent[400]),
-                headingTextStyle: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-                columns: const [
-                  DataColumn(label: Text("Data")),
-                  DataColumn(label: Text("Tipo")),
-                  DataColumn(label: Text("Local")),
-                ],
-                rows: createRows(myList),
-              );
-            } else {
-              return const CircularProgressIndicator();
-            }
-          },
+        Positioned(
+          top: 120,
+          child: FutureBuilder<List>(
+            future: _getBooking(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                var myList = snapshot.data!;
+                if (myList.isEmpty) {
+                  return const Text(
+                    "Ainda não tem nenhuma marcação!",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold),
+                  );
+                }
+                return DataTable(
+                  border: TableBorder.all(),
+                  dividerThickness: 3,
+                  dataRowColor: MaterialStateProperty.all(Colors.white),
+                  headingRowColor:
+                      MaterialStateProperty.all(Colors.lightBlueAccent[400]),
+                  headingTextStyle: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  columns: const [
+                    DataColumn(label: Text("Data")),
+                    DataColumn(label: Text("Tipo")),
+                    DataColumn(label: Text("Local")),
+                  ],
+                  rows: createRows(myList),
+                );
+              } else {
+                return const CircularProgressIndicator();
+              }
+            },
+          ),
         ),
       ],
     );
