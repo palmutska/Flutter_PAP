@@ -5,7 +5,7 @@ import 'package:app/widgets/navbar/app_view.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
-String currentCard = "null2";
+String currentCard = "null";
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -25,7 +25,6 @@ class _LoginPageState extends State<LoginPage> {
         currentCard = event.snapshot.value.toString();
       });
     });
-    currentCard = currentCard;
     if (currentCard != "null") {
       return MaterialApp(
         debugShowCheckedModeBanner: false,

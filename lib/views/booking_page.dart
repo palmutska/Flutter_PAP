@@ -10,8 +10,8 @@ class BookingPage extends StatefulWidget {
 class _BookingPageState extends State<BookingPage> {
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text("BookingPage"),
+    return Container(
+      child: const Text(""),
     );
   }
 }
