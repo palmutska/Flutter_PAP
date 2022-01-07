@@ -17,6 +17,54 @@ class _AccountDataState extends State<AccountData> {
 
   @override
   Widget build(BuildContext context) {
+    Future<User> getUserData() async {
+      //* Name
+      DatabaseReference refName = FirebaseDatabase.instance
+          .ref("server/users/" + currentCard + "/name");
+      String name = "";
+      refName.onValue.listen((event) {
+        var snapshot = event.snapshot;
+        setState(() => name = snapshot.value.toString());
+      });
+      //* Type
+      DatabaseReference refType = FirebaseDatabase.instance
+          .ref("server/users/" + currentCard + "/type");
+      String type = "";
+      refType.onValue.listen((event) {
+        var snapshot = event.snapshot;
+        setState(() => type = snapshot.value.toString());
+      });
+      //* Num (Aluno)
+      DatabaseReference refNum =
+          FirebaseDatabase.instance.ref("server/users/" + currentCard + "/num");
+      String num = "";
+      refNum.onValue.listen((event) {
+        var snapshot = event.snapshot;
+        setState(() => num = snapshot.value.toString());
+      });
+      //* Regime (Aluno)
+      DatabaseReference refReg = FirebaseDatabase.instance
+          .ref("server/users/" + currentCard + "/regime");
+      String regime = "";
+      refReg.onValue.listen((event) {
+        var snapshot = event.snapshot;
+        setState(() => regime = snapshot.value.toString());
+      });
+      DatabaseReference refTicket = FirebaseDatabase.instance
+          .ref("server/users/" + currentCard + "/tickets");
+      String tickets = "";
+      refTicket.onValue.listen((event) {
+        var snapshot = event.snapshot;
+        setState(() => tickets = snapshot.value.toString());
+      });
+      if (type == "Aluno") {
+        return User(
+            name: name, num: num, regime: regime, tickets: tickets, type: type);
+      } else {
+        return User(name: name, tickets: tickets, type: type);
+      }
+    }
+
     return FutureBuilder<User>(
       future: getUserData(),
       builder: (context, snapshot) {
@@ -82,58 +130,5 @@ class _AccountDataState extends State<AccountData> {
         return Container();
       },
     );
-  }
-}
-
-Future<User> getUserData() async {
-  //* Name
-  DatabaseReference refName =
-      FirebaseDatabase.instance.ref("server/users/" + currentCard + "/name");
-  String name = "";
-  refName.onValue.listen((event) {
-    var snapshot = event.snapshot;
-
-    name = snapshot.value.toString();
-  });
-  //* Type
-  DatabaseReference refType =
-      FirebaseDatabase.instance.ref("server/users/" + currentCard + "/type");
-  String type = "";
-  refType.onValue.listen((event) {
-    var snapshot = event.snapshot;
-
-    type = snapshot.value.toString();
-  });
-  //* Num (Aluno)
-  DatabaseReference refNum =
-      FirebaseDatabase.instance.ref("server/users/" + currentCard + "/num");
-  String num = "";
-  refNum.onValue.listen((event) {
-    var snapshot = event.snapshot;
-
-    num = snapshot.value.toString();
-  });
-  //* Regime (Aluno)
-  DatabaseReference refReg =
-      FirebaseDatabase.instance.ref("server/users/" + currentCard + "/regime");
-  String regime = "";
-  refReg.onValue.listen((event) {
-    var snapshot = event.snapshot;
-
-    regime = snapshot.value.toString();
-  });
-  DatabaseReference refTicket =
-      FirebaseDatabase.instance.ref("server/users/" + currentCard + "/tickets");
-  String tickets = "";
-  refTicket.onValue.listen((event) {
-    var snapshot = event.snapshot;
-    tickets = snapshot.value.toString();
-  });
-
-  if (type == "Aluno") {
-    return User(
-        name: name, num: num, regime: regime, tickets: tickets, type: type);
-  } else {
-    return User(name: name, tickets: tickets, type: type);
   }
 }
