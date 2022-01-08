@@ -1,6 +1,7 @@
 import 'package:app/models/user.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class TypeImage extends StatefulWidget {
   User user;
   TypeImage(this.user, {Key? key}) : super(key: key);
