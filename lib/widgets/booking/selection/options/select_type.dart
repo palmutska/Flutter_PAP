@@ -1,3 +1,4 @@
+import 'package:app/models/meal.dart';
 import 'package:app/widgets/booking/selection/options/select_local.dart';
 import 'package:app/widgets/booking/selection/options/select_special.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,8 @@ class SelectType extends StatefulWidget {
 class _SelectTypeState extends State<SelectType> {
   bool nextPage = false;
   bool beforePage = false;
+  bool optionOne = false;
+  bool optionTwo = false;
   @override
   Widget build(BuildContext context) {
     if (beforePage) {
@@ -46,20 +49,79 @@ class _SelectTypeState extends State<SelectType> {
                     },
                     icon: const Icon(Icons.navigate_before_outlined),
                   ),
-                  Container(
-                    color: Colors.green,
-                    width: 200,
-                    height: 200,
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        if (optionTwo) {
+                          optionOne = true;
+                          optionTwo = false;
+                        } else {
+                          optionOne = true;
+                        }
+                      });
+                    },
+                    child: Container(
+                      width: 190,
+                      height: 220,
+                      child: Center(
+                        child:
+                            optionOne ? const Text("") : const Text("Almoço"),
+                      ),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          width: 3,
+                          color: optionOne ? Colors.green : Colors.transparent,
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          opacity: optionOne ? 1 : 0.4,
+                          image: const AssetImage(
+                            "assets/images/almoco.jpeg",
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
-                  Container(
-                    color: Colors.lightGreen,
-                    width: 200,
-                    height: 200,
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        if (optionOne) {
+                          optionOne = false;
+                          optionTwo = true;
+                        } else {
+                          optionOne = false;
+                        }
+                      });
+                    },
+                    child: Container(
+                      width: 190,
+                      height: 220,
+                      child: Center(
+                        child:
+                            optionTwo ? const Text("") : const Text("Jantar"),
+                      ),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          width: 3,
+                          color: optionTwo ? Colors.green : Colors.transparent,
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          opacity: optionTwo ? 1 : 0.4,
+                          image: const AssetImage(
+                            "assets/images/jantar.jpg",
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
                   IconButton(
                     iconSize: 30,
                     color: Colors.white,
                     onPressed: () {
+                      mealInfo.tipo = optionOne ? "almoco" : "jantar";
                       setState(() {
                         nextPage = true;
                       });

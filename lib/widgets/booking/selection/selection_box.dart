@@ -11,18 +11,25 @@ class SelectionBox extends StatefulWidget {
 class _SelectionBoxState extends State<SelectionBox> {
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 600,
-      height: 350,
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: Colors.grey,
+    return DefaultTextStyle(
+      style: const TextStyle(
+        color: Colors.white,
+        fontSize: 30,
+        fontWeight: FontWeight.bold,
+      ),
+      child: SizedBox(
+        width: 600,
+        height: 350,
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.grey,
+            ),
+            borderRadius: const BorderRadius.all(Radius.circular(20)),
+            color: Colors.transparent.withOpacity(0.15),
           ),
-          borderRadius: const BorderRadius.all(Radius.circular(20)),
-          color: Colors.transparent.withOpacity(0.15),
+          child: const SelectLocal(),
         ),
-        child: const SelectLocal(),
       ),
     );
   }

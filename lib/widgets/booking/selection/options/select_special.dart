@@ -1,4 +1,3 @@
-import 'package:app/widgets/booking/selection/options/select_local.dart';
 import 'package:app/widgets/booking/selection/options/select_type.dart';
 import 'package:flutter/material.dart';
 

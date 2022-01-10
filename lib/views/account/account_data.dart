@@ -50,6 +50,7 @@ class _AccountDataState extends State<AccountData> {
         var snapshot = event.snapshot;
         setState(() => regime = snapshot.value.toString());
       });
+      //* Tickets
       DatabaseReference refTicket = FirebaseDatabase.instance
           .ref("server/users/" + currentCard + "/tickets");
       String tickets = "";
