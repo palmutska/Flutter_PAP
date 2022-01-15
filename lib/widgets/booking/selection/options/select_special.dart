@@ -11,29 +11,197 @@ class SelectSpecial extends StatefulWidget {
 class _SelectSpecialState extends State<SelectSpecial> {
   bool nextPage = false;
   bool beforePage = false;
+  bool optionOne = false, optionTwo = false, optionThree = false;
   @override
   Widget build(BuildContext context) {
     if (beforePage) {
       return const SelectType();
     }
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         const Padding(
           padding: EdgeInsets.only(bottom: 30, top: 30),
           child: Text(
             "Que tipo de refeição quer?",
             style: TextStyle(
-              fontSize: 24,
+              fontSize: 28,
               color: Colors.white,
               fontWeight: FontWeight.bold,
             ),
           ),
         ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
+        IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              IconButton(
+                iconSize: 30,
+                color: Colors.white,
+                onPressed: () {
+                  setState(() {
+                    beforePage = true;
+                  });
+                },
+                icon: const Icon(Icons.navigate_before_outlined),
+              ),
+              Column(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        optionOne = true;
+                        optionTwo = false;
+                        optionThree = false;
+                      });
+                    },
+                    child: Container(
+                      width: 400,
+                      height: 110,
+                      child: Center(
+                        child:
+                            optionOne ? const Text("") : const Text("Normal"),
+                      ),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          width: 3,
+                          color: optionOne ? Colors.green : Colors.transparent,
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          opacity: optionOne ? 1 : 0.4,
+                          image: const AssetImage(
+                            "assets/images/tipoNormal.jpg",
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              optionOne = false;
+                              optionTwo = true;
+                              optionThree = false;
+                            });
+                          },
+                          child: Container(
+                            width: 200,
+                            height: 85,
+                            child: Center(
+                              child: optionTwo
+                                  ? const Text("")
+                                  : const Text("Vegetariano"),
+                            ),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                width: 3,
+                                color: optionTwo
+                                    ? Colors.green
+                                    : Colors.transparent,
+                              ),
+                              borderRadius: BorderRadius.circular(20),
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                opacity: optionTwo ? 1 : 0.4,
+                                image: const AssetImage(
+                                  "assets/images/tipoVegetariano.jpg",
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              optionOne = false;
+                              optionTwo = false;
+                              optionThree = true;
+                            });
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: Container(
+                              width: 200,
+                              height: 85,
+                              child: Center(
+                                child: optionThree
+                                    ? const Text("")
+                                    : const Text("Dieta"),
+                              ),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  width: 3,
+                                  color: optionThree
+                                      ? Colors.green
+                                      : Colors.transparent,
+                                ),
+                                borderRadius: BorderRadius.circular(20),
+                                image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  opacity: optionThree ? 1 : 0.4,
+                                  image: const AssetImage(
+                                    "assets/images/tipoDieta.jpg",
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+              IconButton(
+                iconSize: 30,
+                color: Colors.white,
+                onPressed: () {
+                  setState(() {
+                    nextPage = true;
+                  });
+                },
+                icon: const Icon(Icons.navigate_next_outlined),
+              ),
+            ],
+          ),
+        )
+      ],
+    );
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
             IconButton(
               iconSize: 30,
               color: Colors.white,
@@ -44,16 +212,7 @@ class _SelectSpecialState extends State<SelectSpecial> {
               },
               icon: const Icon(Icons.navigate_before_outlined),
             ),
-            Container(
-              color: Colors.green,
-              width: 200,
-              height: 200,
-            ),
-            Container(
-              color: Colors.lightGreen,
-              width: 200,
-              height: 200,
-            ),
+
             IconButton(
               iconSize: 30,
               color: Colors.white,
@@ -64,9 +223,6 @@ class _SelectSpecialState extends State<SelectSpecial> {
               },
               icon: const Icon(Icons.navigate_next_outlined),
             ),
-          ],
-        )
-      ],
-    );
-  }
-}
+
+
+ */

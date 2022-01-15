@@ -1,4 +1,3 @@
-import 'package:app/models/meal.dart';
 import 'package:app/widgets/booking/selection/options/select_local.dart';
 import 'package:app/widgets/booking/selection/options/select_special.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +28,7 @@ class _SelectTypeState extends State<SelectType> {
                 child: Text(
                   "Almoço ou jantar?",
                   style: TextStyle(
-                    fontSize: 24,
+                    fontSize: 28,
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
@@ -52,12 +51,8 @@ class _SelectTypeState extends State<SelectType> {
                   GestureDetector(
                     onTap: () {
                       setState(() {
-                        if (optionTwo) {
-                          optionOne = true;
-                          optionTwo = false;
-                        } else {
-                          optionOne = true;
-                        }
+                        optionOne = true;
+                        optionTwo = false;
                       });
                     },
                     child: Container(
@@ -86,12 +81,8 @@ class _SelectTypeState extends State<SelectType> {
                   GestureDetector(
                     onTap: () {
                       setState(() {
-                        if (optionOne) {
-                          optionOne = false;
-                          optionTwo = true;
-                        } else {
-                          optionOne = false;
-                        }
+                        optionOne = false;
+                        optionTwo = true;
                       });
                     },
                     child: Container(

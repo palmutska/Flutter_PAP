@@ -16,6 +16,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    precacheImage(const AssetImage("assets/images/almoco.jpeg"), context);
+    precacheImage(const AssetImage("assets/images/jantar.jpg"), context);
+    precacheImage(const AssetImage("assets/images/primeira.png"), context);
+    precacheImage(const AssetImage("assets/images/segunda.png"), context);
+    precacheImage(const AssetImage("assets/images/tipoDieta.jpg"), context);
+    precacheImage(const AssetImage("assets/images/tipoNormal.jpg"), context);
+    precacheImage(
+        const AssetImage("assets/images/tipoVegetariano.jpg"), context);
+
     return const MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,

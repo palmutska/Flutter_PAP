@@ -42,12 +42,8 @@ class _SelectLocalState extends State<SelectLocal> {
               GestureDetector(
                 onTap: () {
                   setState(() {
-                    if (optionTwo) {
-                      optionOne = true;
-                      optionTwo = false;
-                    } else {
-                      optionOne = true;
-                    }
+                    optionOne = true;
+                    optionTwo = false;
                   });
                 },
                 child: Container(
@@ -75,12 +71,8 @@ class _SelectLocalState extends State<SelectLocal> {
               GestureDetector(
                 onTap: () {
                   setState(() {
-                    if (optionOne) {
-                      optionOne = false;
-                      optionTwo = true;
-                    } else {
-                      optionTwo = true;
-                    }
+                    optionOne = false;
+                    optionTwo = true;
                   });
                 },
                 child: Container(

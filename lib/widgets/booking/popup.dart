@@ -26,12 +26,12 @@ class _ShowPopupState extends State<ShowPopup> {
           Text(widget.msg),
         ],
       ),
-      actions: <Widget>[
+      actions: [
         TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text('Close'),
+          child: const Text('Fechar'),
         ),
       ],
     );
