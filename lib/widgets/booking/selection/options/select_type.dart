@@ -1,3 +1,4 @@
+import 'package:app/widgets/booking/popup.dart';
 import 'package:app/widgets/booking/selection/options/select_local.dart';
 import 'package:app/widgets/booking/selection/options/select_special.dart';
 import 'package:flutter/material.dart';
@@ -112,9 +113,21 @@ class _SelectTypeState extends State<SelectType> {
                     iconSize: 30,
                     color: Colors.white,
                     onPressed: () {
-                      mealInfo.tipo = optionOne ? "almoco" : "jantar";
                       setState(() {
-                        nextPage = true;
+                        if (optionOne || optionTwo) {
+                          nextPage = true;
+                          mealInfo.tipo = optionOne ? "almoco" : "jantar";
+                        } else {
+                          showDialog(
+                            context: context,
+                            builder: (context) => ShowPopup(
+                              buildContext: context,
+                              msg:
+                                  'Antes de continuar selecione uma das opções!',
+                              title: 'Selecione uma opção',
+                            ),
+                          );
+                        }
                       });
                     },
                     icon: const Icon(Icons.navigate_next_outlined),

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:intl/intl.dart';
 
+List<DateTime> datas = [];
+
 class DatePicker extends StatefulWidget {
   const DatePicker({Key? key}) : super(key: key);
 
@@ -11,9 +13,12 @@ class DatePicker extends StatefulWidget {
 
 class _DatePickerState extends State<DatePicker> {
   final DateFormat formatter = DateFormat('dd/MM');
-  List<DateTime> datas = [];
 
-  void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {}
+  void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
+    setState(() {
+      datas = args.value;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

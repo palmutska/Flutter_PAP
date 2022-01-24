@@ -1,3 +1,6 @@
+import 'package:app/widgets/booking/popup.dart';
+import 'package:app/widgets/booking/selectDate/datepicker.dart';
+import 'package:app/widgets/booking/selection/options/select_local.dart';
 import 'package:app/widgets/booking/selection/options/select_type.dart';
 import 'package:flutter/material.dart';
 
@@ -53,6 +56,7 @@ class _SelectSpecialState extends State<SelectSpecial> {
                         optionOne = true;
                         optionTwo = false;
                         optionThree = false;
+                        mealInfo.especial = "normal";
                       });
                     },
                     child: Container(
@@ -88,6 +92,7 @@ class _SelectSpecialState extends State<SelectSpecial> {
                               optionOne = false;
                               optionTwo = true;
                               optionThree = false;
+                              mealInfo.especial = "vegetariano";
                             });
                           },
                           child: Container(
@@ -122,6 +127,7 @@ class _SelectSpecialState extends State<SelectSpecial> {
                               optionOne = false;
                               optionTwo = false;
                               optionThree = true;
+                              mealInfo.especial = "dieta";
                             });
                           },
                           child: Padding(
@@ -163,7 +169,31 @@ class _SelectSpecialState extends State<SelectSpecial> {
                 color: Colors.white,
                 onPressed: () {
                   setState(() {
-                    nextPage = true;
+                    if (datas.isNotEmpty) {
+                      if (optionOne || optionTwo || optionThree) {
+                        nextPage = true;
+                      } else {
+                        showDialog(
+                          context: context,
+                          builder: (context) => ShowPopup(
+                            buildContext: context,
+                            msg: 'Antes de continuar selecione uma das opções!',
+                            title: 'Selecione uma opção',
+                          ),
+                        );
+                      }
+                    } else {
+                      setState(() {
+                        showDialog(
+                          context: context,
+                          builder: (context) => ShowPopup(
+                            buildContext: context,
+                            msg: 'Antes de continuar selecione uma data!',
+                            title: 'Selecione uma opção',
+                          ),
+                        );
+                      });
+                    }
                   });
                 },
                 icon: const Icon(Icons.navigate_next_outlined),
