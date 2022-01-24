@@ -1,6 +1,7 @@
 import 'package:app/widgets/booking/popup.dart';
 import 'package:app/widgets/booking/selection/options/select_local.dart';
 import 'package:app/widgets/booking/selection/options/select_special.dart';
+import 'package:app/widgets/global/options_top_text.dart';
 import 'package:flutter/material.dart';
 
 class SelectType extends StatefulWidget {
@@ -24,17 +25,7 @@ class _SelectTypeState extends State<SelectType> {
         ? Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Padding(
-                padding: EdgeInsets.only(bottom: 30, top: 30),
-                child: Text(
-                  "Almoço ou jantar?",
-                  style: TextStyle(
-                    fontSize: 28,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
+              TopText("Almoço ou Jantar?"),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,

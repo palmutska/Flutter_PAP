@@ -1,6 +1,7 @@
 import 'package:app/models/meal.dart';
 import 'package:app/widgets/booking/popup.dart';
 import 'package:app/widgets/booking/selection/options/select_type.dart';
+import 'package:app/widgets/global/options_top_text.dart';
 import 'package:flutter/material.dart';
 
 Meal mealInfo = Meal();
@@ -23,17 +24,7 @@ class _SelectLocalState extends State<SelectLocal> {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Padding(
-            padding: EdgeInsets.only(bottom: 30, top: 30),
-            child: Text(
-              "Em que seccão quer tomar a refeição?",
-              style: TextStyle(
-                fontSize: 28,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
+          const TopText("Em que secção vai tomar a refeição?"),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
