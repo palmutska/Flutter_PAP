@@ -18,6 +18,12 @@ class _DatePickerState extends State<DatePicker> {
   @override
   Widget build(BuildContext context) {
     return SfDateRangePicker(
+      selectableDayPredicate: (DateTime datetime) {
+        if (datetime.weekday == 6 || datetime.weekday == 7) {
+          return false;
+        }
+        return true;
+      },
       backgroundColor: Colors.white,
       showNavigationArrow: true,
       selectionShape: DateRangePickerSelectionShape.circle,
