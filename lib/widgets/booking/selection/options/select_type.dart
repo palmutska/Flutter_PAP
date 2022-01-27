@@ -25,7 +25,7 @@ class _SelectTypeState extends State<SelectType> {
         ? Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              TopText("Almoço ou Jantar?"),
+              const TopText("Almoço ou Jantar?"),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,

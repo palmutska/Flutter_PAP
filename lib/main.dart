@@ -24,6 +24,10 @@ class MyApp extends StatelessWidget {
     precacheImage(const AssetImage("assets/images/tipoNormal.jpg"), context);
     precacheImage(
         const AssetImage("assets/images/tipoVegetariano.jpg"), context);
+    precacheImage(const AssetImage("assets/images/aluno.png"), context);
+    precacheImage(const AssetImage("assets/images/militar.png"), context);
+    precacheImage(const AssetImage("assets/images/professor.png"), context);
+    precacheImage(const AssetImage("assets/images/funcionario.png"), context);
 
     return const MaterialApp(
       title: 'Flutter Demo',
