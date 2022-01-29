@@ -1,4 +1,4 @@
-import 'package:app/widgets/booking/selection/select_meal.dart';
+import 'package:app/widgets/booking/stepper.dart';
 import 'package:flutter/material.dart';
 
 class BookingPage extends StatefulWidget {
@@ -28,9 +28,7 @@ class _BookingPageState extends State<BookingPage> {
                 borderRadius: const BorderRadius.all(Radius.circular(20)),
                 color: Colors.transparent.withOpacity(0.15),
               ),
-              child: Column(
-                children: const [SelectMeal()],
-              ),
+              child: const OptionsStepper(),
             ),
           ),
         )
