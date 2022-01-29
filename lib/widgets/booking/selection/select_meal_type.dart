@@ -1,8 +1,8 @@
 import 'package:app/widgets/booking/popup.dart';
 import 'package:app/widgets/booking/selectDate/datepicker.dart';
-import 'package:app/widgets/booking/selection/options/confirm_options.dart';
-import 'package:app/widgets/booking/selection/options/select_local.dart';
-import 'package:app/widgets/booking/selection/options/select_type.dart';
+import 'package:app/widgets/booking/selection/select_dates.dart';
+import 'package:app/widgets/booking/selection/select_local.dart';
+import 'package:app/widgets/booking/selection/select_meal.dart';
 import 'package:app/widgets/global/options_top_text.dart';
 import 'package:flutter/material.dart';
 
@@ -20,7 +20,9 @@ class _SelectSpecialState extends State<SelectSpecial> {
   @override
   Widget build(BuildContext context) {
     if (beforePage) {
-      return const SelectType();
+      return const SelectLocal(
+        isJantarPressed: false,
+      );
     }
     return !nextPage
         ? Column(
@@ -49,7 +51,7 @@ class _SelectSpecialState extends State<SelectSpecial> {
                               optionOne = true;
                               optionTwo = false;
                               optionThree = false;
-                              mealInfo.especial = "normal";
+                              //mealInfo.especial = "normal";
                             });
                           },
                           child: Container(
@@ -88,7 +90,7 @@ class _SelectSpecialState extends State<SelectSpecial> {
                                     optionOne = false;
                                     optionTwo = true;
                                     optionThree = false;
-                                    mealInfo.especial = "vegetariano";
+                                    //mealInfo.especial = "vegetariano";
                                   });
                                 },
                                 child: Container(
@@ -123,7 +125,7 @@ class _SelectSpecialState extends State<SelectSpecial> {
                                     optionOne = false;
                                     optionTwo = false;
                                     optionThree = true;
-                                    mealInfo.especial = "dieta";
+                                    //mealInfo.especial = "dieta";
                                   });
                                 },
                                 child: Padding(
@@ -165,32 +167,18 @@ class _SelectSpecialState extends State<SelectSpecial> {
                       color: Colors.white,
                       onPressed: () {
                         setState(() {
-                          if (datas.isNotEmpty) {
-                            if (optionOne || optionTwo || optionThree) {
-                              nextPage = true;
-                            } else {
-                              showDialog(
-                                context: context,
-                                builder: (context) => ShowPopup(
-                                  buildContext: context,
-                                  msg:
-                                      'Antes de continuar selecione uma das opções!',
-                                  title: 'Selecione uma opção',
-                                ),
-                              );
-                            }
+                          if (optionOne || optionTwo || optionThree) {
+                            nextPage = true;
                           } else {
-                            setState(() {
-                              showDialog(
-                                context: context,
-                                builder: (context) => ShowPopup(
-                                  buildContext: context,
-                                  msg: 'Antes de continuar selecione uma data!',
-                                  title:
-                                      'Use o calendário ao lado para selecionar.',
-                                ),
-                              );
-                            });
+                            showDialog(
+                              context: context,
+                              builder: (context) => ShowPopup(
+                                buildContext: context,
+                                msg:
+                                    'Antes de continuar selecione uma das opções!',
+                                title: 'Selecione uma opção',
+                              ),
+                            );
                           }
                         });
                       },
@@ -201,57 +189,6 @@ class _SelectSpecialState extends State<SelectSpecial> {
               )
             ],
           )
-        : const ConfirmOptions();
+        : const SelectDate();
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-
-            IconButton(
-              iconSize: 30,
-              color: Colors.white,
-              onPressed: () {
-                setState(() {
-                  beforePage = true;
-                });
-              },
-              icon: const Icon(Icons.navigate_before_outlined),
-            ),
-
-            IconButton(
-              iconSize: 30,
-              color: Colors.white,
-              onPressed: () {
-                setState(() {
-                  nextPage = true;
-                });
-              },
-              icon: const Icon(Icons.navigate_next_outlined),
-            ),
-
-
- */

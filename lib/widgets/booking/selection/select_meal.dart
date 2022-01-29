@@ -1,17 +1,16 @@
 import 'package:app/widgets/booking/popup.dart';
-import 'package:app/widgets/booking/selection/options/select_local.dart';
-import 'package:app/widgets/booking/selection/options/select_special.dart';
+import 'package:app/widgets/booking/selection/select_local.dart';
 import 'package:app/widgets/global/options_top_text.dart';
 import 'package:flutter/material.dart';
 
-class SelectType extends StatefulWidget {
-  const SelectType({Key? key}) : super(key: key);
+class SelectMeal extends StatefulWidget {
+  const SelectMeal({Key? key}) : super(key: key);
 
   @override
-  _SelectTypeState createState() => _SelectTypeState();
+  _SelectMealState createState() => _SelectMealState();
 }
 
-class _SelectTypeState extends State<SelectType> {
+class _SelectMealState extends State<SelectMeal> {
   bool nextPage = false;
   bool beforePage = false;
   bool optionOne = false;
@@ -19,7 +18,7 @@ class _SelectTypeState extends State<SelectType> {
   @override
   Widget build(BuildContext context) {
     if (beforePage) {
-      return const SelectLocal();
+      //return const SelectLocal();
     }
     return !nextPage
         ? Column(
@@ -30,15 +29,8 @@ class _SelectTypeState extends State<SelectType> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  IconButton(
-                    iconSize: 30,
-                    color: Colors.white,
-                    onPressed: () {
-                      setState(() {
-                        beforePage = true;
-                      });
-                    },
-                    icon: const Icon(Icons.navigate_before_outlined),
+                  const SizedBox(
+                    width: 46,
                   ),
                   GestureDetector(
                     onTap: () {
@@ -107,7 +99,7 @@ class _SelectTypeState extends State<SelectType> {
                       setState(() {
                         if (optionOne || optionTwo) {
                           nextPage = true;
-                          mealInfo.tipo = optionOne ? "almoco" : "jantar";
+                          //mealInfo.tipo = optionOne ? "almoco" : "jantar";
                         } else {
                           showDialog(
                             context: context,
@@ -127,6 +119,8 @@ class _SelectTypeState extends State<SelectType> {
               )
             ],
           )
-        : const SelectSpecial();
+        : SelectLocal(
+            isJantarPressed: optionTwo,
+          );
   }
 }

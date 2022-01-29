@@ -1,13 +1,13 @@
-import 'package:app/models/meal.dart';
 import 'package:app/widgets/booking/popup.dart';
-import 'package:app/widgets/booking/selection/options/select_type.dart';
+import 'package:app/widgets/booking/selection/select_meal.dart';
+import 'package:app/widgets/booking/selection/select_meal_type.dart';
 import 'package:app/widgets/global/options_top_text.dart';
 import 'package:flutter/material.dart';
 
-Meal mealInfo = Meal();
-
 class SelectLocal extends StatefulWidget {
-  const SelectLocal({Key? key}) : super(key: key);
+  final bool isJantarPressed;
+  const SelectLocal({Key? key, required this.isJantarPressed})
+      : super(key: key);
 
   @override
   _SelectLocalState createState() => _SelectLocalState();
@@ -15,11 +15,15 @@ class SelectLocal extends StatefulWidget {
 
 class _SelectLocalState extends State<SelectLocal> {
   bool nextPage = false;
+  bool beforePage = false;
   bool optionOne = false;
   bool optionTwo = false;
 
   @override
   Widget build(BuildContext context) {
+    if (beforePage) {
+      return const SelectMeal();
+    }
     if (!nextPage) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -29,7 +33,14 @@ class _SelectLocalState extends State<SelectLocal> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              const SizedBox(width: 46),
+              IconButton(
+                iconSize: 30,
+                color: Colors.white,
+                onPressed: () {
+                  beforePage = true;
+                },
+                icon: const Icon(Icons.navigate_before_outlined),
+              ),
               GestureDetector(
                 onTap: () {
                   setState(() {
@@ -61,10 +72,22 @@ class _SelectLocalState extends State<SelectLocal> {
               ),
               GestureDetector(
                 onTap: () {
-                  setState(() {
-                    optionOne = false;
-                    optionTwo = true;
-                  });
+                  if (widget.isJantarPressed) {
+                    showDialog(
+                      context: context,
+                      builder: (context) => ShowPopup(
+                        buildContext: context,
+                        msg:
+                            'Não é possível marcar um jantar na segunda secção!',
+                        title: 'Erro',
+                      ),
+                    );
+                  } else {
+                    setState(() {
+                      optionOne = false;
+                      optionTwo = true;
+                    });
+                  }
                 },
                 child: Container(
                   width: 190,
@@ -95,7 +118,7 @@ class _SelectLocalState extends State<SelectLocal> {
                   setState(() {
                     if (optionOne || optionTwo) {
                       nextPage = true;
-                      mealInfo.local = optionOne ? "primeira" : "segunda";
+                      //mealInfo.local = optionOne ? "primeira" : "segunda";
                     } else {
                       showDialog(
                         context: context,
@@ -115,7 +138,7 @@ class _SelectLocalState extends State<SelectLocal> {
         ],
       );
     } else {
-      return const SelectType();
+      return const SelectSpecial();
     }
   }
 }
