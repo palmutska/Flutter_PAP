@@ -5,6 +5,8 @@ import 'package:app/widgets/global/options_top_text.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+List<DataRow> listRows = [];
+
 class ConfirmOptions extends StatefulWidget {
   const ConfirmOptions({Key? key}) : super(key: key);
 
@@ -15,7 +17,6 @@ class ConfirmOptions extends StatefulWidget {
 class _ConfirmOptionsState extends State<ConfirmOptions> {
   List<DataRow> getRows() {
     final DateFormat dateFormatter = DateFormat("dd/MM");
-    List<DataRow> listRows = [];
     for (var value in datas) {
       listRows.add(
         DataRow(
@@ -42,6 +43,7 @@ class _ConfirmOptionsState extends State<ConfirmOptions> {
 
   @override
   Widget build(BuildContext context) {
+    if (onNewBookingPressed) return const SelectLocal();
     return Column(
       children: [
         const TopText("Confirme as suas marcações"),
@@ -83,6 +85,7 @@ class _ConfirmOptionsState extends State<ConfirmOptions> {
                   ),
                   onPressed: () {
                     datas = [];
+                    listRows = [];
                     Navigator.pushReplacement(
                       context,
                       PageRouteBuilder(

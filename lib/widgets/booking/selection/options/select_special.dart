@@ -186,7 +186,8 @@ class _SelectSpecialState extends State<SelectSpecial> {
                                 builder: (context) => ShowPopup(
                                   buildContext: context,
                                   msg: 'Antes de continuar selecione uma data!',
-                                  title: 'Selecione uma opção',
+                                  title:
+                                      'Use o calendário ao lado para selecionar.',
                                 ),
                               );
                             });
