@@ -1,4 +1,4 @@
-import 'package:app/views/account/account_data.dart';
+import 'package:app/widgets/account_data.dart';
 import 'package:flutter/material.dart';
 
 class AccountPage extends StatefulWidget {

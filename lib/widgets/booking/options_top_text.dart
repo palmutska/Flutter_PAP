@@ -13,7 +13,7 @@ class _TopTextState extends State<TopText> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 30, top: 30),
+      padding: const EdgeInsets.only(bottom: 20),
       child: Text(
         widget.text,
         style: const TextStyle(

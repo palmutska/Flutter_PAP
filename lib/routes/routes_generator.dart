@@ -1,4 +1,4 @@
-import 'package:app/views/account/account_page.dart';
+import 'package:app/views/account_page.dart';
 import 'package:app/views/booking_page.dart';
 import 'package:app/views/list_booking_page.dart';
 import 'package:flutter/material.dart';

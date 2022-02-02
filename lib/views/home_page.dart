@@ -29,7 +29,7 @@ class _HomePageState extends State<HomePage> {
                 children: const [
                   TimeText(),
                   Text(
-                    "Passe o cartão para continuar",
+                    "Passe o cartão para continuar!",
                     style: TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.normal,

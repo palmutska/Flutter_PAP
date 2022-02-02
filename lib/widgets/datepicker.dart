@@ -14,12 +14,6 @@ class DatePicker extends StatefulWidget {
 class _DatePickerState extends State<DatePicker> {
   final DateFormat formatter = DateFormat('dd/MM');
 
-  void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
-    setState(() {
-      datas = args.value;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return SfDateRangePicker(
@@ -47,6 +41,13 @@ class _DatePickerState extends State<DatePicker> {
       )),
       onSelectionChanged: _onSelectionChanged,
       selectionMode: DateRangePickerSelectionMode.multiple,
+      initialSelectedDates: datas,
     );
+  }
+
+  void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
+    setState(() {
+      datas = args.value;
+    });
   }
 }
