@@ -114,9 +114,11 @@ class _SelectionAreaState extends State<SelectionArea> {
                       iconSize: 30,
                       color: Colors.white,
                       onPressed: () {
-                        setState(() {
-                          decrementIndex();
-                        });
+                        _index > 0
+                            ? setState(() {
+                                decrementIndex();
+                              })
+                            : null;
                       },
                       icon: const Icon(Icons.navigate_before_outlined),
                     ),
