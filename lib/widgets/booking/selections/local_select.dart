@@ -39,7 +39,7 @@ class _SelectLocalState extends State<SelectLocal> {
               optionTwo = false;
             });
             isAnySelected = true;
-            booking.tipo = "primeira";
+            booking.local = "primeira";
           },
           child: Container(
             width: 190,

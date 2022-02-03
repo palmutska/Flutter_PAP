@@ -1,6 +1,7 @@
 import 'package:app/models/meal.dart';
 import 'package:app/widgets/booking/selections/local_select.dart';
 import 'package:app/widgets/booking/selections/meal_select.dart';
+import 'package:app/widgets/booking/selections/meal_type_select.dart';
 import 'package:app/widgets/datepicker.dart';
 import 'package:app/widgets/booking/options_top_text.dart';
 import 'package:app/widgets/global/popup.dart';
@@ -37,19 +38,9 @@ class _SelectionAreaState extends State<SelectionArea> {
   }
 
   void decrementIndex() {
-    isAnySelected = false;
-    switch (_index) {
-      case 1:
-        booking.local = null;
-        booking.tipo = null;
-        break;
-      case 2:
-        booking.local = null;
-        booking.tipo = null;
-        booking.especial = null;
-        break;
+    if (_index > 0) {
+      _index--;
     }
-    _index--;
   }
 
   Widget getOptionPage(int index) {
@@ -64,6 +55,8 @@ class _SelectionAreaState extends State<SelectionArea> {
         );
       case 1:
         return const SelectMeal();
+      case 2:
+        return const SelectMealType();
       default:
         return const Text("Out of bounds");
     }

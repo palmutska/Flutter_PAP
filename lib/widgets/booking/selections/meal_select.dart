@@ -25,7 +25,7 @@ class _SelectMealState extends State<SelectMeal> {
               optionTwo = false;
             });
             isAnySelected = true;
-            //booking.tipo = "almoco";
+            booking.tipo = "almoco";
           },
           child: Container(
             width: 190,
