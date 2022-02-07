@@ -57,7 +57,7 @@ class _ConfirmOptionsState extends State<ConfirmOptions> {
         Column(
           children: [
             SizedBox(
-              height: 220,
+              height: 205,
               width: 450,
               child: SingleChildScrollView(
                 child: DataTable(
@@ -81,6 +81,41 @@ class _ConfirmOptionsState extends State<ConfirmOptions> {
                     rows: getRows()),
               ),
             ),
+            DefaultTextStyle(
+              style: const TextStyle(fontWeight: FontWeight.bold),
+              child: SizedBox(
+                width: 450,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        fixedSize: const Size(100, 40),
+                        primary: Colors.red,
+                      ),
+                      onPressed: () {},
+                      child: const Text("Cancelar"),
+                    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        fixedSize: const Size(180, 40),
+                        primary: Colors.blue,
+                      ),
+                      onPressed: () {},
+                      child: const Text("Marcar outra refeição"),
+                    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        fixedSize: const Size(100, 40),
+                        primary: Colors.green,
+                      ),
+                      onPressed: () {},
+                      child: const Text("Confirmar"),
+                    )
+                  ],
+                ),
+              ),
+            )
           ],
         ),
       ],
