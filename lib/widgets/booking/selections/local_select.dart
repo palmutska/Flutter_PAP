@@ -25,10 +25,6 @@ class _SelectLocalState extends State<SelectLocal> {
 
   @override
   Widget build(BuildContext context) {
-    setState(() {
-      topText = "Selecione o local das sua refeição.";
-    });
-
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [

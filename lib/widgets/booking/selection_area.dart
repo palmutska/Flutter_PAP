@@ -1,4 +1,5 @@
 import 'package:app/models/meal.dart';
+import 'package:app/widgets/booking/selections/confirm_options.dart';
 import 'package:app/widgets/booking/selections/local_select.dart';
 import 'package:app/widgets/booking/selections/meal_select.dart';
 import 'package:app/widgets/booking/selections/meal_type_select.dart';
@@ -7,7 +8,6 @@ import 'package:app/widgets/booking/options_top_text.dart';
 import 'package:app/widgets/global/popup.dart';
 import 'package:flutter/material.dart';
 
-String topText = "";
 Meal booking = Meal();
 
 class SelectionArea extends StatefulWidget {
@@ -18,22 +18,64 @@ class SelectionArea extends StatefulWidget {
 }
 
 class _SelectionAreaState extends State<SelectionArea> {
+  var topText = [
+    "Selecione o local da sua refeição",
+    "Almoço ou Jantar?",
+    "Selecione o tipo de refeição",
+    "Confirme as opções!"
+  ];
+
   bool confirmationPage = false;
   int _index = 0;
 
+  //index
+  //0 - local
+  //1 - tipo refeição
+  //2 - especial
+  //3 confirmar
+
   void incrementIndex() {
-    if (isAnySelected) {
-      _index++;
-      isAnySelected = false;
+    if (_index <= 3 && _index != 2) {
+      if (isAnySelected) {
+        _index++;
+        isAnySelected = false;
+      } else {
+        showDialog(
+          context: context,
+          builder: (context) => ShowPopup(
+            buildContext: context,
+            msg: 'Selecione uma das opções.',
+            title: 'Ops!',
+          ),
+        );
+      }
     } else {
-      showDialog(
-        context: context,
-        builder: (context) => ShowPopup(
-          buildContext: context,
-          msg: 'Selecione uma das opções.',
-          title: 'Ops!',
-        ),
-      );
+      if (_index == 2) {
+        if (datas.isNotEmpty) {
+          if (isAnySelected) {
+            _index++;
+            isAnySelected = false;
+          } else {
+            showDialog(
+              context: context,
+              builder: (context) => ShowPopup(
+                buildContext: context,
+                msg: 'Selecione uma opção.',
+                title: 'Ops!',
+              ),
+            );
+          }
+        } else {
+          showDialog(
+            context: context,
+            builder: (context) => ShowPopup(
+              buildContext: context,
+              msg: 'Selecione pelo menos uma data.',
+              title: 'Ops!',
+            ),
+          );
+        }
+      }
     }
   }
 
@@ -57,6 +99,8 @@ class _SelectionAreaState extends State<SelectionArea> {
         return const SelectMeal();
       case 2:
         return const SelectMealType();
+      case 3:
+        return const ConfirmOptions();
       default:
         return const Text("Out of bounds");
     }
@@ -99,7 +143,7 @@ class _SelectionAreaState extends State<SelectionArea> {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                TopText(topText),
+                TopText(topText[_index]),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
