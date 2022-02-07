@@ -80,9 +80,7 @@ class _SelectionAreaState extends State<SelectionArea> {
   }
 
   void decrementIndex() {
-    if (_index > 0) {
-      _index--;
-    }
+    _index--;
   }
 
   Widget getOptionPage(int index) {
@@ -100,7 +98,13 @@ class _SelectionAreaState extends State<SelectionArea> {
       case 2:
         return const SelectMealType();
       case 3:
-        return const ConfirmOptions();
+        return ConfirmOptions(
+          onInit: () {
+            setState(() {
+              confirmationPage = true;
+            });
+          },
+        );
       default:
         return const Text("Out of bounds");
     }
@@ -125,19 +129,22 @@ class _SelectionAreaState extends State<SelectionArea> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            IgnorePointer(
-              ignoring: confirmationPage,
-              child: Container(
-                margin: const EdgeInsets.only(left: 30),
-                width: 300,
-                height: 300,
-                foregroundDecoration: confirmationPage
-                    ? const BoxDecoration(
-                        color: Colors.grey,
-                        backgroundBlendMode: BlendMode.saturation,
-                      )
-                    : null,
-                child: const DatePicker(),
+            Padding(
+              padding: EdgeInsets.only(left: _index == 3 ? 20 : 0),
+              child: IgnorePointer(
+                ignoring: confirmationPage,
+                child: Container(
+                  margin: const EdgeInsets.only(left: 30),
+                  width: 300,
+                  height: 300,
+                  foregroundDecoration: confirmationPage
+                      ? const BoxDecoration(
+                          color: Colors.grey,
+                          backgroundBlendMode: BlendMode.saturation,
+                        )
+                      : null,
+                  child: const DatePicker(),
+                ),
               ),
             ),
             Column(
@@ -147,31 +154,43 @@ class _SelectionAreaState extends State<SelectionArea> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    IconButton(
-                      iconSize: 30,
-                      color: Colors.white,
-                      onPressed: () {
-                        _index > 0
-                            ? setState(() {
-                                decrementIndex();
-                              })
-                            : null;
-                      },
-                      icon: const Icon(Icons.navigate_before_outlined),
+                    Visibility(
+                      maintainSize: true,
+                      maintainAnimation: true,
+                      maintainState: true,
+                      visible: !confirmationPage,
+                      child: IconButton(
+                        iconSize: 30,
+                        color: Colors.white,
+                        onPressed: () {
+                          _index > 0
+                              ? setState(() {
+                                  decrementIndex();
+                                })
+                              : null;
+                        },
+                        icon: const Icon(Icons.navigate_before_outlined),
+                      ),
                     ),
                     getOptionPage(_index),
-                    IconButton(
-                      iconSize: 30,
-                      color: Colors.white,
-                      onPressed: () {
-                        setState(() {
-                          incrementIndex();
-                        });
-                      },
-                      icon: const Icon(Icons.navigate_next_outlined),
+                    Visibility(
+                      maintainSize: true,
+                      maintainAnimation: true,
+                      maintainState: true,
+                      visible: !confirmationPage,
+                      child: IconButton(
+                        iconSize: 30,
+                        color: Colors.white,
+                        onPressed: () {
+                          setState(() {
+                            incrementIndex();
+                          });
+                        },
+                        icon: const Icon(Icons.navigate_next_outlined),
+                      ),
                     ),
                   ],
-                ),
+                )
               ],
             ),
           ],
