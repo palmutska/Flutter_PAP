@@ -1,4 +1,5 @@
 import 'package:app/models/meal.dart';
+import 'package:app/views/login_page.dart';
 import 'package:app/widgets/booking/selections/confirm_options.dart';
 import 'package:app/widgets/booking/selections/local_select.dart';
 import 'package:app/widgets/booking/selections/meal_select.dart';
@@ -6,7 +7,9 @@ import 'package:app/widgets/booking/selections/meal_type_select.dart';
 import 'package:app/widgets/datepicker.dart';
 import 'package:app/widgets/booking/options_top_text.dart';
 import 'package:app/widgets/global/popup.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 Meal booking = Meal();
 
@@ -27,12 +30,7 @@ class _SelectionAreaState extends State<SelectionArea> {
 
   bool confirmationPage = false;
   int _index = 0;
-
-  //index
-  //0 - local
-  //1 - tipo refeição
-  //2 - especial
-  //3 confirmar
+  List<Meal> bookingList = [];
 
   void incrementIndex() {
     if (_index <= 3 && _index != 2) {
@@ -53,6 +51,7 @@ class _SelectionAreaState extends State<SelectionArea> {
       if (_index == 2) {
         if (datas.isNotEmpty) {
           if (isAnySelected) {
+            confirmationPage = true;
             _index++;
             isAnySelected = false;
           } else {
@@ -70,7 +69,7 @@ class _SelectionAreaState extends State<SelectionArea> {
             context: context,
             builder: (context) => ShowPopup(
               buildContext: context,
-              msg: 'Selecione pelo menos uma data.',
+              msg: 'Selecione uma data.',
               title: 'Ops!',
             ),
           );
@@ -81,6 +80,40 @@ class _SelectionAreaState extends State<SelectionArea> {
 
   void decrementIndex() {
     _index--;
+  }
+
+  void cancelBooking() {
+    setState(() {
+      _index = 0;
+      datas = [];
+      isAnySelected = false;
+    });
+  }
+
+  void newBooking() {
+    setState(() {
+      _index = 0;
+      isAnySelected = false;
+    });
+  }
+
+  void confirmBooking() {
+    DatabaseReference ref =
+        FirebaseDatabase.instance.ref("server/bookings/" + currentCard + "/");
+
+    try {
+      for (var data in datas) {
+        ref.push().set({
+          'data': data.toString(),
+          'local': booking.local,
+          'tipo': booking.tipo,
+        });
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print("Erro: " + e.toString());
+      }
+    }
   }
 
   Widget getOptionPage(int index) {
@@ -98,13 +131,11 @@ class _SelectionAreaState extends State<SelectionArea> {
       case 2:
         return const SelectMealType();
       case 3:
-        return ConfirmOptions(
-          onInit: () {
-            setState(() {
-              confirmationPage = true;
-            });
-          },
-        );
+        bookingList.add(booking);
+        for (var value in bookingList) {
+          print(value.toString());
+        }
+        return const ConfirmOptions();
       default:
         return const Text("Out of bounds");
     }
@@ -151,42 +182,85 @@ class _SelectionAreaState extends State<SelectionArea> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TopText(topText[_index]),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                Column(
                   children: [
-                    Visibility(
-                      maintainSize: true,
-                      maintainAnimation: true,
-                      maintainState: true,
-                      visible: !confirmationPage,
-                      child: IconButton(
-                        iconSize: 30,
-                        color: Colors.white,
-                        onPressed: () {
-                          _index > 0
-                              ? setState(() {
-                                  decrementIndex();
-                                })
-                              : null;
-                        },
-                        icon: const Icon(Icons.navigate_before_outlined),
-                      ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Visibility(
+                          maintainSize: true,
+                          maintainAnimation: true,
+                          maintainState: true,
+                          visible: !confirmationPage,
+                          child: IconButton(
+                            iconSize: 30,
+                            color: Colors.white,
+                            onPressed: () {
+                              _index > 0
+                                  ? setState(() {
+                                      decrementIndex();
+                                    })
+                                  : null;
+                            },
+                            icon: const Icon(Icons.navigate_before_outlined),
+                          ),
+                        ),
+                        getOptionPage(_index),
+                        Visibility(
+                          maintainSize: true,
+                          maintainAnimation: true,
+                          maintainState: true,
+                          visible: !confirmationPage,
+                          child: IconButton(
+                            iconSize: 30,
+                            color: Colors.white,
+                            onPressed: () {
+                              setState(() {
+                                incrementIndex();
+                              });
+                            },
+                            icon: const Icon(Icons.navigate_next_outlined),
+                          ),
+                        ),
+                      ],
                     ),
-                    getOptionPage(_index),
                     Visibility(
-                      maintainSize: true,
-                      maintainAnimation: true,
-                      maintainState: true,
-                      visible: !confirmationPage,
-                      child: IconButton(
-                        iconSize: 30,
-                        color: Colors.white,
-                        onPressed: () {
-                          setState(() {
-                            incrementIndex();
-                          });
-                        },
-                        icon: const Icon(Icons.navigate_next_outlined),
+                      visible: confirmationPage,
+                      child: Row(
+                        children: [
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              fixedSize: const Size(100, 40),
+                              primary: Colors.red,
+                            ),
+                            onPressed: () {
+                              cancelBooking();
+                            },
+                            child: const Text("Cancelar"),
+                          ),
+                          const SizedBox(width: 30),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              fixedSize: const Size(220, 40),
+                              primary: Colors.blue,
+                            ),
+                            onPressed: () {
+                              newBooking();
+                            },
+                            child: const Text("Criar/Apagar uma marcação"),
+                          ),
+                          const SizedBox(width: 30),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              fixedSize: const Size(100, 40),
+                              primary: Colors.green,
+                            ),
+                            onPressed: () {
+                              confirmBooking();
+                            },
+                            child: const Text("Confirmar"),
+                          ),
+                        ],
                       ),
                     ),
                   ],

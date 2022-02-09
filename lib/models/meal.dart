@@ -37,4 +37,13 @@ class Meal {
     data['especial'] = _especial;
     return data;
   }
+
+  @override
+  String toString() {
+    String s = "";
+    s += "Local: " + local.toString();
+    s += "\nTipo: " + tipo.toString();
+    s += "\nEspecial: " + especial.toString();
+    return s;
+  }
 }
