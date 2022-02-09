@@ -1,3 +1,4 @@
+import 'package:app/widgets/booking/selection_area.dart';
 import 'package:app/widgets/booking/selections/local_select.dart';
 import 'package:flutter/material.dart';
 
@@ -25,6 +26,7 @@ class _SelectMealTypeState extends State<SelectMealType> {
               optionThree = false;
             });
             isAnySelected = true;
+            booking.especial = "normal";
           },
           child: Container(
             margin: const EdgeInsets.only(bottom: 10),
@@ -59,6 +61,7 @@ class _SelectMealTypeState extends State<SelectMealType> {
                   optionThree = false;
                 });
                 isAnySelected = true;
+                booking.especial = "vegetariano";
               },
               child: Container(
                 width: 195,
@@ -91,6 +94,7 @@ class _SelectMealTypeState extends State<SelectMealType> {
                   optionThree = true;
                 });
                 isAnySelected = true;
+                booking.especial = "dieta";
               },
               child: Container(
                 width: 195,
