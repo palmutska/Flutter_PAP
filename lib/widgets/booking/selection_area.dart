@@ -84,6 +84,7 @@ class _SelectionAreaState extends State<SelectionArea> {
 
   void cancelBooking() {
     setState(() {
+      bookingList.clear();
       _index = 0;
       datas = [];
       isAnySelected = false;
@@ -131,37 +132,16 @@ class _SelectionAreaState extends State<SelectionArea> {
       case 2:
         return const SelectMealType();
       case 3:
-        List<Meal> pivots = [];
         for (var data in datas) {
-          //booking = booking atual que o user está a fazer
-          //pivot = objeto para ajudar
+          //Criar um objeto Meal de "ajuda" e atribuir os valores do booking
+          Meal tempMeal = Meal(
+              data: data,
+              especial: booking.especial,
+              local: booking.local,
+              tipo: booking.tipo);
+          bookingList.add(tempMeal);
+        }
 
-          //! REFAZER ISTO
-          Meal pivot = Meal();
-          pivot.data = data;
-          pivot.especial = booking.especial;
-          pivot.local = booking.local;
-          pivot.tipo = booking.tipo;
-          pivots.add(pivot);
-        }
-        if (bookingList.isEmpty) {
-          for (var element in pivots) {
-            bookingList.add(element);
-          }
-        } else {
-          for (var booking in bookingList) {
-            for (var element in pivots) {
-              if (element.data == booking.data &&
-                  element.local == booking.local &&
-                  element.tipo == booking.tipo) {
-                bookingList.remove(booking);
-              }
-            }
-          }
-          for (var element in pivots) {
-            bookingList.add(element);
-          }
-        }
         return const ConfirmOptions();
 
       default:

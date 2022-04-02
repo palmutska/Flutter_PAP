@@ -29,10 +29,9 @@ class _DatePickerState extends State<DatePicker> {
       minDate: DateTime.now().add(const Duration(days: 2)),
       maxDate: DateTime.now().add(const Duration(days: 32)),
       view: DateRangePickerView.month,
-      monthCellStyle: DateRangePickerMonthCellStyle(
+      monthCellStyle: const DateRangePickerMonthCellStyle(
           weekendDatesDecoration: BoxDecoration(
-        color: Colors.red,
-        border: Border.all(color: const Color(0xFFF44436), width: 1),
+        color: Colors.grey,
         shape: BoxShape.circle,
       )),
       headerStyle: const DateRangePickerHeaderStyle(

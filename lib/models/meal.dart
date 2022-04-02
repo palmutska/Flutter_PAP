@@ -6,9 +6,9 @@ class Meal {
   String? _tipo;
   String? _especial;
 
-  Meal({DateTime? datas, String? local, String? tipo, String? especial}) {
-    if (datas != null) {
-      _data = datas;
+  Meal({DateTime? data, String? local, String? tipo, String? especial}) {
+    if (data != null) {
+      _data = data;
     }
     if (local != null) {
       _local = local;
@@ -31,7 +31,7 @@ class Meal {
   set especial(String? especial) => _especial = especial;
 
   Meal.fromJson(Map<String, dynamic> json) {
-    _data = json['datas'];
+    _data = json['data'];
     _local = json['local'];
     _tipo = json['tipo'];
     _especial = json['especial'];
@@ -39,7 +39,7 @@ class Meal {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['datas'] = _data;
+    data['data'] = _data;
     data['local'] = _local;
     data['tipo'] = _tipo;
     data['especial'] = _especial;
@@ -49,6 +49,7 @@ class Meal {
   @override
   String toString() {
     String s = "";
+    s += "Data: " + data.toString();
     s += "Local: " + local.toString();
     s += "\nTipo: " + tipo.toString();
     s += "\nEspecial: " + especial.toString();

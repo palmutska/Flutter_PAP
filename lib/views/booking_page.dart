@@ -1,6 +1,5 @@
 import 'package:app/widgets/booking/selection_area.dart';
 import 'package:flutter/material.dart';
-import 'package:photo_view/photo_view.dart';
 
 class BookingPage extends StatefulWidget {
   const BookingPage({Key? key}) : super(key: key);
