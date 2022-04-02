@@ -1,5 +1,4 @@
 import 'package:app/widgets/booking/selection_area.dart';
-import 'package:app/widgets/datepicker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -13,23 +12,23 @@ class _ConfirmOptionsState extends State<ConfirmOptions> {
   List<DataRow> getRows() {
     final DateFormat dateFormatter = DateFormat("dd/MM");
     List<DataRow> listRows = [];
-    for (var value in datas) {
+    for (var value in bookingList) {
       listRows.add(
         DataRow(
           cells: [
             DataCell(
-              Text(dateFormatter.format(value)),
+              Text(dateFormatter.format(value.data!)),
             ),
             DataCell(
-              Text(booking.local == "primeira" ? "1ª secção" : "2ª secção"),
+              Text(value.local == "primeira" ? "1ª secção" : "2ª secção"),
             ),
             DataCell(
-              Text(booking.tipo == "almoco" ? "Almoço" : "Jantar"),
+              Text(value.tipo == "almoco" ? "Almoço" : "Jantar"),
             ),
             DataCell(
-              Text(booking.especial == "normal"
+              Text(value.especial == "normal"
                   ? "Normal"
-                  : booking.especial == "dieta"
+                  : value.especial == "dieta"
                       ? "Dieta"
                       : "Vegetariano"),
             ),

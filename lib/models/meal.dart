@@ -1,11 +1,15 @@
 // ignore_for_file: unnecessary_getters_setters
 
 class Meal {
+  DateTime? _data;
   String? _local;
   String? _tipo;
   String? _especial;
 
-  Meal({String? local, String? tipo, String? especial}) {
+  Meal({DateTime? datas, String? local, String? tipo, String? especial}) {
+    if (datas != null) {
+      _data = datas;
+    }
     if (local != null) {
       _local = local;
     }
@@ -17,6 +21,8 @@ class Meal {
     }
   }
 
+  DateTime? get data => _data;
+  set data(DateTime? data) => _data = data;
   String? get local => _local;
   set local(String? local) => _local = local;
   String? get tipo => _tipo;
@@ -25,6 +31,7 @@ class Meal {
   set especial(String? especial) => _especial = especial;
 
   Meal.fromJson(Map<String, dynamic> json) {
+    _data = json['datas'];
     _local = json['local'];
     _tipo = json['tipo'];
     _especial = json['especial'];
@@ -32,6 +39,7 @@ class Meal {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    data['datas'] = _data;
     data['local'] = _local;
     data['tipo'] = _tipo;
     data['especial'] = _especial;

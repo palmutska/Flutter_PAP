@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 Meal booking = Meal();
+List<Meal> bookingList = [];
 
 class SelectionArea extends StatefulWidget {
   const SelectionArea({Key? key}) : super(key: key);
@@ -30,7 +31,6 @@ class _SelectionAreaState extends State<SelectionArea> {
 
   bool confirmationPage = false;
   int _index = 0;
-  List<Meal> bookingList = [];
 
   void incrementIndex() {
     if (_index <= 3 && _index != 2) {
@@ -131,11 +131,39 @@ class _SelectionAreaState extends State<SelectionArea> {
       case 2:
         return const SelectMealType();
       case 3:
-        bookingList.add(booking);
-        for (var value in bookingList) {
-          print(value.toString());
+        List<Meal> pivots = [];
+        for (var data in datas) {
+          //booking = booking atual que o user está a fazer
+          //pivot = objeto para ajudar
+
+          //! REFAZER ISTO
+          Meal pivot = Meal();
+          pivot.data = data;
+          pivot.especial = booking.especial;
+          pivot.local = booking.local;
+          pivot.tipo = booking.tipo;
+          pivots.add(pivot);
+        }
+        if (bookingList.isEmpty) {
+          for (var element in pivots) {
+            bookingList.add(element);
+          }
+        } else {
+          for (var booking in bookingList) {
+            for (var element in pivots) {
+              if (element.data == booking.data &&
+                  element.local == booking.local &&
+                  element.tipo == booking.tipo) {
+                bookingList.remove(booking);
+              }
+            }
+          }
+          for (var element in pivots) {
+            bookingList.add(element);
+          }
         }
         return const ConfirmOptions();
+
       default:
         return const Text("Out of bounds");
     }
