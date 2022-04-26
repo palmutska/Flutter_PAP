@@ -50,7 +50,7 @@ class Meal {
   String toString() {
     String s = "";
     s += "Data: " + data.toString();
-    s += "Local: " + local.toString();
+    s += "\nLocal: " + local.toString();
     s += "\nTipo: " + tipo.toString();
     s += "\nEspecial: " + especial.toString();
     return s;

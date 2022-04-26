@@ -1,5 +1,6 @@
 import 'package:app/widgets/booking/selection_area.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class BookingPage extends StatefulWidget {
   const BookingPage({Key? key}) : super(key: key);
@@ -9,41 +10,17 @@ class BookingPage extends StatefulWidget {
 }
 
 class _BookingPageState extends State<BookingPage> {
+  Future<String> getUrl() {
+    final ref = FirebaseStorage.instance
+        .ref()
+        .child('Ementa-IPE-Marco_004-768x1087.jpg');
+
+    Future<String> url = ref.getDownloadURL();
+    return url;
+  }
+
   @override
   Widget build(BuildContext context) {
-    Future _showMyDialog() async {
-      return showDialog(
-        context: context,
-        barrierDismissible: false, // user must tap button!
-        builder: (BuildContext context) {
-          return AlertDialog(
-            backgroundColor: Colors.white,
-            title: const Text('AlertDialog Title'),
-            content: SingleChildScrollView(
-              child: ListBody(
-                children: [
-                  SizedBox(
-                    width: 400,
-                    height: 400,
-                    child: Image.network(
-                        "www.pupilos.eu/wp-content/uploads/2022/03/Ementa-IPE-Marco_004-scaled.jpg"),
-                  )
-                ],
-              ),
-            ),
-            actions: [
-              TextButton(
-                child: const Text('Approve'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
-    }
-
     return Stack(
       children: [
         Center(
@@ -63,10 +40,48 @@ class _BookingPageState extends State<BookingPage> {
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     onPressed: () {
-                      _showMyDialog();
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text('Ementa'),
+                            content: FutureBuilder(
+                              future: getUrl(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasError) {
+                                  return const Text(
+                                      "Erro ao carregar a ementa, tente de novo");
+                                }
+                                if (snapshot.hasData) {
+                                  return SizedBox(
+                                    width: 768,
+                                    height: 1087,
+                                    child: SingleChildScrollView(
+                                      child: Image.network(
+                                        snapshot.data.toString(),
+                                        scale: 0.2,
+                                      ),
+                                    ),
+                                  );
+                                }
+                                //! Meter o indicador + pequeno
+                                return const CircularProgressIndicator();
+                              },
+                            ),
+                            actions: [
+                              TextButton(
+                                child: const Text('Sair'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
                     },
                     style: ElevatedButton.styleFrom(
-                        primary: Colors.transparent,
+                        primary: const Color.fromARGB(0, 31, 27, 27),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20.0),
                         ),

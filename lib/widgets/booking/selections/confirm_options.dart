@@ -11,6 +11,18 @@ class ConfirmOptions extends StatefulWidget {
 class _ConfirmOptionsState extends State<ConfirmOptions> {
   List<DataRow> getRows() {
     final DateFormat dateFormatter = DateFormat("dd/MM");
+    /*
+    for (int i = 0; i < bookingList.length; i++) {
+      for (int j = 1; j < bookingList.length; j++) {
+        if (bookingList[i].data == bookingList[j].data &&
+            bookingList[i].local == bookingList[j].local) {
+          bookingList.removeAt(j);
+        }
+      }
+    }
+    print("BookingList: \n");
+    print(bookingList.toString());
+    */
     List<DataRow> listRows = [];
     for (var value in bookingList) {
       listRows.add(

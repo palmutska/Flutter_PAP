@@ -10,6 +10,7 @@ import 'package:app/widgets/global/popup.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'dart:convert';
 
 Meal booking = Meal();
 List<Meal> bookingList = [];
@@ -98,21 +99,67 @@ class _SelectionAreaState extends State<SelectionArea> {
     });
   }
 
-  void confirmBooking() {
+  void confirmBooking() async {
     DatabaseReference ref =
-        FirebaseDatabase.instance.ref("server/bookings/" + currentCard + "/");
+        FirebaseDatabase.instance.ref("server/bookings/" + currentCard);
+    DatabaseReference refUser =
+        FirebaseDatabase.instance.ref("server/users/" + currentCard);
 
-    try {
-      for (var data in datas) {
-        ref.push().set({
-          'data': data.toString(),
-          'local': booking.local,
-          'tipo': booking.tipo,
-        });
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        print("Erro: " + e.toString());
+    final snapshot = await refUser.child('tickets').get();
+    if (snapshot.exists) {
+      if (int.parse(snapshot.value.toString()) >= bookingList.length) {
+        try {
+          for (var data in datas) {
+            ref.push().set({
+              'data': data.toString(),
+              'local': booking.local,
+              'tipo': booking.tipo,
+            });
+            refUser.child("tickets").set(ServerValue.increment(-1));
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: const Text("Confirmado!"),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(bookingList.length > 1
+                        ? "Refeições marcadas com sucesso!"
+                        : "Refeição marcada com sucesso!"),
+                  ],
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      setState(() {
+                        bookingList.clear();
+                        _index = 0;
+                        datas = [];
+                        isAnySelected = false;
+                      });
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('Fechar'),
+                  ),
+                ],
+              ),
+            );
+          }
+        } catch (e) {
+          if (kDebugMode) {
+            print("Erro: " + e.toString());
+          }
+        }
+      } else {
+        showDialog(
+          context: context,
+          builder: (context) => ShowPopup(
+            buildContext: context,
+            msg: 'Não tens tickets suficientes!',
+            title: 'Ops!',
+          ),
+        );
       }
     }
   }
@@ -133,7 +180,6 @@ class _SelectionAreaState extends State<SelectionArea> {
         return const SelectMealType();
       case 3:
         for (var data in datas) {
-          //Criar um objeto Meal de "ajuda" e atribuir os valores do booking
           Meal tempMeal = Meal(
               data: data,
               especial: booking.especial,
@@ -247,6 +293,7 @@ class _SelectionAreaState extends State<SelectionArea> {
                             child: const Text("Cancelar"),
                           ),
                           const SizedBox(width: 30),
+                          /*
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               fixedSize: const Size(220, 40),
@@ -257,6 +304,7 @@ class _SelectionAreaState extends State<SelectionArea> {
                             },
                             child: const Text("Criar/Apagar uma marcação"),
                           ),
+                           */
                           const SizedBox(width: 30),
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
