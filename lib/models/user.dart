@@ -1,6 +1,7 @@
 // ignore_for_file: unnecessary_getters_setters
 
 class User {
+  String? _id;
   String? _name;
   String? _num;
   String? _regime;
@@ -8,11 +9,15 @@ class User {
   String? _type;
 
   User(
-      {String? name,
+      {String? id,
+      String? name,
       String? num,
       String? regime,
       String? tickets,
       String? type}) {
+    if (id != null) {
+      _id = id;
+    }
     if (name != null) {
       _name = name;
     }
@@ -30,6 +35,8 @@ class User {
     }
   }
 
+  String? get id => _id;
+  set id(String? id) => _id = id;
   String? get name => _name;
   set name(String? name) => _name = name;
   String? get num => _num;
@@ -42,6 +49,7 @@ class User {
   set type(String? type) => _type = type;
 
   User.fromJson(Map<String, dynamic> json) {
+    _id = json['id'];
     _name = json['name'];
     _num = json['num'];
     _regime = json['regime'];
@@ -51,6 +59,7 @@ class User {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = _id;
     data['name'] = _name;
     data['num'] = _num;
     data['regime'] = _regime;

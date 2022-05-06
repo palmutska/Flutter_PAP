@@ -10,7 +10,6 @@ import 'package:app/widgets/global/popup.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'dart:convert';
 
 Meal booking = Meal();
 List<Meal> bookingList = [];
@@ -103,7 +102,7 @@ class _SelectionAreaState extends State<SelectionArea> {
     DatabaseReference ref =
         FirebaseDatabase.instance.ref("server/bookings/" + currentCard);
     DatabaseReference refUser =
-        FirebaseDatabase.instance.ref("server/users/" + currentCard);
+        FirebaseDatabase.instance.ref("server/verifiedUsers/" + currentCard);
 
     final snapshot = await refUser.child('tickets').get();
     if (snapshot.exists) {
@@ -115,37 +114,41 @@ class _SelectionAreaState extends State<SelectionArea> {
               'local': booking.local,
               'tipo': booking.tipo,
             });
-            refUser.child("tickets").set(ServerValue.increment(-1));
-            showDialog(
-              context: context,
-              builder: (context) => AlertDialog(
-                title: const Text("Confirmado!"),
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(bookingList.length > 1
-                        ? "Refeições marcadas com sucesso!"
-                        : "Refeição marcada com sucesso!"),
-                  ],
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      setState(() {
-                        bookingList.clear();
-                        _index = 0;
-                        datas = [];
-                        isAnySelected = false;
-                      });
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text('Fechar'),
-                  ),
+            if (int.parse(snapshot.value.toString()) > 0) {
+              refUser.child("tickets").set(ServerValue.increment(-1));
+            } else {
+              refUser.child("tickets").update({"tickets": 0});
+            }
+          }
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text("Confirmado!"),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(bookingList.length > 1
+                      ? "Refeições marcadas com sucesso!"
+                      : "Refeição marcada com sucesso!"),
                 ],
               ),
-            );
-          }
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      bookingList.clear();
+                      _index = 0;
+                      datas = [];
+                      isAnySelected = false;
+                    });
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('Fechar'),
+                ),
+              ],
+            ),
+          );
         } catch (e) {
           if (kDebugMode) {
             print("Erro: " + e.toString());
@@ -293,18 +296,6 @@ class _SelectionAreaState extends State<SelectionArea> {
                             child: const Text("Cancelar"),
                           ),
                           const SizedBox(width: 30),
-                          /*
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              fixedSize: const Size(220, 40),
-                              primary: Colors.blue,
-                            ),
-                            onPressed: () {
-                              newBooking();
-                            },
-                            child: const Text("Criar/Apagar uma marcação"),
-                          ),
-                           */
                           const SizedBox(width: 30),
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(

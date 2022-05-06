@@ -1,6 +1,7 @@
 import 'package:app/routes/routes.dart';
 import 'package:app/routes/routes_generator.dart';
 import 'package:app/views/home_page.dart';
+import 'package:app/views/register_card.dart';
 import 'package:app/widgets/navbar/app_view.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -17,15 +18,30 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
-    DatabaseReference ref = FirebaseDatabase.instance.ref("server/currentCard");
-    Stream<DatabaseEvent> stream = ref.onValue;
+    DatabaseReference refCurrentCard =
+        FirebaseDatabase.instance.ref("server/currentCard");
+    Stream<DatabaseEvent> streamCurrentCard = refCurrentCard.onValue;
 
-    stream.listen((DatabaseEvent event) {
+    DatabaseReference refUsers =
+        FirebaseDatabase.instance.ref("server/verifiedUsers");
+    Stream<DatabaseEvent> streamUsers = refUsers.onValue;
+
+    streamCurrentCard.listen((DatabaseEvent event) {
       setState(() {
         currentCard = event.snapshot.value.toString();
       });
     });
-    if (currentCard != "null") {
+
+    var users = [];
+
+    streamUsers.listen((DatabaseEvent event) {
+      for (var user in event.snapshot.children) {
+        users.add(user.key);
+      }
+    });
+    if (currentCard == "null") {
+      return const HomePage();
+    } else if (users.contains(currentCard)) {
       return MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Refeições',
@@ -37,7 +53,8 @@ class _LoginPageState extends State<LoginPage> {
         onGenerateRoute: RouteGenerator.generateRoute,
       );
     } else {
-      return const HomePage();
+      print("registar cartao");
+      return const RegisterCard();
     }
   }
 }
