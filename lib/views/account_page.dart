@@ -12,11 +12,9 @@ class _AccountPageState extends State<AccountPage> {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      children: [
-        Positioned(
-          left: (MediaQuery.of(context).size.width / 2) - 460,
-          bottom: MediaQuery.of(context).size.height / 2 - 200,
-          child: const DefaultTextStyle(
+      children: const [
+        Center(
+          child: DefaultTextStyle(
             textAlign: TextAlign.left,
             style: TextStyle(
               color: Colors.white,

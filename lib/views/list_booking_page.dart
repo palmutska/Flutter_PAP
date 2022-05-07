@@ -48,7 +48,8 @@ class _ListPage extends State<ListPage> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator();
         }
-        if (snapshot.hasData) {
+        if (snapshot.hasData &&
+            (snapshot.data! as Map<String, Meal>).isNotEmpty) {
           Map<String, Meal> list = snapshot.data! as Map<String, Meal>;
           if (list.isNotEmpty) {
             for (var k in list.keys) {
@@ -70,7 +71,6 @@ class _ListPage extends State<ListPage> {
                           content: SingleChildScrollView(
                             child: ListBody(
                               children: [
-                                //!Fix this
                                 RichText(
                                   text: TextSpan(
                                     children: [
@@ -78,13 +78,9 @@ class _ListPage extends State<ListPage> {
                                           text:
                                               "Tem a certeza que quer desmarcar o\n"),
                                       TextSpan(
-                                        text: (list[k]!.tipo == "almoco"
-                                                ? "almoço"
-                                                : "jantar") +
+                                        text: list[k]!.tipo! +
                                             " na " +
-                                            (list[k]!.local == "primeira"
-                                                ? "1ª secção"
-                                                : "2ª secção") +
+                                            list[k]!.local! +
                                             " no dia " +
                                             formatter.format(list[k]!.data!) +
                                             "?",
@@ -152,10 +148,6 @@ class _ListPage extends State<ListPage> {
                 )),
               ]));
             }
-          } else {
-            return const Center(
-              child: Text("Sem dados"),
-            );
           }
           return Center(
             child: SizedBox(
@@ -206,10 +198,19 @@ class _ListPage extends State<ListPage> {
               ),
             ),
           );
+        } else {
+          return const Padding(
+            padding: EdgeInsets.only(top: 60),
+            child: Text(
+              "Não tens nenhuma marcação!",
+              style: TextStyle(
+                  fontSize: 32,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
+          );
         }
-        return const Center(
-          child: Text("Sem dados"),
-        );
       },
     );
   }

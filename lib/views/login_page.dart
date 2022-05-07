@@ -53,7 +53,6 @@ class _LoginPageState extends State<LoginPage> {
         onGenerateRoute: RouteGenerator.generateRoute,
       );
     } else {
-      print("registar cartao");
       return const RegisterCard();
     }
   }

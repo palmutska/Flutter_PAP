@@ -39,8 +39,7 @@ class _RegisterCardState extends State<RegisterCard> {
 
     DatabaseReference refUnverifiedUsers =
         FirebaseDatabase.instance.ref("server/unverifiedUsers");
-    //! Fix This
-    //* VAMBORA MAQUINAAAA
+
     refUnverifiedUsers.onValue.listen((DatabaseEvent event) {
       if (event.snapshot.value != null) {
         final data = event.snapshot.value as Map<String, dynamic>;
