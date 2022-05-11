@@ -3,6 +3,7 @@ import 'package:app/views/login_page.dart';
 import 'package:app/widgets/global/background.dart';
 import 'package:app/widgets/global/exit_button.dart';
 import 'package:app/widgets/global/logo.dart';
+import 'package:app/widgets/global/popup.dart';
 import 'package:app/widgets/num_pad.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -40,6 +41,8 @@ class _RegisterCardState extends State<RegisterCard> {
     DatabaseReference refUnverifiedUsers =
         FirebaseDatabase.instance.ref("server/unverifiedUsers");
 
+    DatabaseReference refCurrentCard = FirebaseDatabase.instance.ref("server");
+
     refUnverifiedUsers.onValue.listen((DatabaseEvent event) {
       if (event.snapshot.value != null) {
         final data = event.snapshot.value as Map<String, dynamic>;
@@ -47,10 +50,12 @@ class _RegisterCardState extends State<RegisterCard> {
       }
     });
 
-    if (unverifiedUsers.keys.toList().contains(_myController.text)) {
+    if (unverifiedUsers.keys
+        .toList()
+        .contains(_myController.text.replaceAll(" ", ""))) {
       User user = User();
       unverifiedUsers.forEach((key, value) {
-        user.id = key.toString();
+        user.id = key.toString().replaceAll(" ", "");
         user.name = value["name"].toString();
         user.num = value["num"].toString();
         user.regime = value["regime"].toString();
@@ -58,8 +63,23 @@ class _RegisterCardState extends State<RegisterCard> {
         user.type = value["type"].toString();
       });
       unverifiedToVerified(user);
+      showDialog(
+        context: context,
+        builder: (context) => ShowPopup(
+          buildContext: context,
+          msg: 'Este cartão foi registado com sucesso!',
+          title: 'Registro',
+        ),
+      ).then((value) => refCurrentCard.update({"currentCard": "null"}));
     } else {
-      print("Nao tem");
+      showDialog(
+        context: context,
+        builder: (context) => ShowPopup(
+          buildContext: context,
+          msg: 'Este código não está associado a nenhuma conta!\n',
+          title: 'Ops!',
+        ),
+      );
     }
   }
 

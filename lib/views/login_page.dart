@@ -28,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
 
     streamCurrentCard.listen((DatabaseEvent event) {
       setState(() {
-        currentCard = event.snapshot.value.toString();
+        currentCard = event.snapshot.value.toString().replaceAll(" ", "");
       });
     });
 

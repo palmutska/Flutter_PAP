@@ -285,27 +285,28 @@ class _SelectionAreaState extends State<SelectionArea> {
                       visible: confirmationPage,
                       child: Row(
                         children: [
-                          ElevatedButton(
+                          ElevatedButton.icon(
                             style: ElevatedButton.styleFrom(
-                              fixedSize: const Size(100, 40),
+                              fixedSize: const Size(150, 40),
                               primary: Colors.red,
                             ),
                             onPressed: () {
                               cancelBooking();
                             },
-                            child: const Text("Cancelar"),
+                            icon: const Icon(Icons.cancel_outlined),
+                            label: const Text("Cancelar"),
                           ),
-                          const SizedBox(width: 30),
-                          const SizedBox(width: 30),
-                          ElevatedButton(
+                          const SizedBox(width: 60),
+                          ElevatedButton.icon(
                             style: ElevatedButton.styleFrom(
-                              fixedSize: const Size(100, 40),
+                              fixedSize: const Size(150, 40),
                               primary: Colors.green,
                             ),
                             onPressed: () {
                               confirmBooking();
                             },
-                            child: const Text("Confirmar"),
+                            icon: const Icon(Icons.check_outlined),
+                            label: const Text("Confirmar"),
                           ),
                         ],
                       ),

@@ -28,7 +28,6 @@ class _AccountDataState extends State<AccountData> {
 
   @override
   Widget build(BuildContext context) {
-    //?Devo receber o user no login ou apenas aqui???
     return FutureBuilder<User>(
       future: getUser(),
       builder: (context, snapshot) {
