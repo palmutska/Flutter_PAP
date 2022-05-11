@@ -5,13 +5,13 @@ class TimeText extends StatelessWidget {
 
   String greeting() {
     var hour = DateTime.now().hour;
-    if (hour < 12) {
-      return 'Bom dia!';
+    if (hour > 6 && hour < 12) {
+      return "Bom dia!";
     }
-    if (hour < 19) {
-      return 'Boa tarde!';
+    if (hour < 19 && hour >= 12) {
+      return "Boa tarde!";
     }
-    return 'Boa noite!';
+    return "Boa noite!";
   }
 
   @override

@@ -152,49 +152,52 @@ class _ListPage extends State<ListPage> {
           return Center(
             child: SizedBox(
               width: 600,
-              height: 400,
-              child: DataTable(
-                headingTextStyle: const TextStyle(fontWeight: FontWeight.bold),
-                border: TableBorder.symmetric(
-                  inside: const BorderSide(width: 1),
+              height: 300,
+              child: SingleChildScrollView(
+                child: DataTable(
+                  headingTextStyle:
+                      const TextStyle(fontWeight: FontWeight.bold),
+                  border: TableBorder.symmetric(
+                    inside: const BorderSide(width: 1),
+                  ),
+                  sortAscending: isAscending,
+                  sortColumnIndex: sortColumnIndex,
+                  columns: [
+                    DataColumn(
+                      label: Row(children: const [
+                        Text("Data "),
+                        Icon(Icons.calendar_month_outlined)
+                      ]),
+                    ),
+                    DataColumn(
+                      onSort: (columnIndex, asceding) {
+                        //? Tentar fazer o sort
+                        setState(() {
+                          sortColumnIndex = columnIndex;
+                          isAscending = asceding;
+                        });
+                      },
+                      label: Row(children: const [
+                        Text("Tipo "),
+                        Icon(Icons.local_dining_outlined)
+                      ]),
+                    ),
+                    DataColumn(
+                      label: Row(children: const [
+                        Text("Local "),
+                        Icon(Icons.place_outlined)
+                      ]),
+                    ),
+                    DataColumn(
+                        label: Row(
+                      children: const [
+                        Text("Ações "),
+                        Icon(Icons.more_horiz_outlined)
+                      ],
+                    )),
+                  ],
+                  rows: rows,
                 ),
-                sortAscending: isAscending,
-                sortColumnIndex: sortColumnIndex,
-                columns: [
-                  DataColumn(
-                    label: Row(children: const [
-                      Text("Data "),
-                      Icon(Icons.calendar_month_outlined)
-                    ]),
-                  ),
-                  DataColumn(
-                    onSort: (columnIndex, asceding) {
-                      //? Tentar fazer o sort
-                      setState(() {
-                        sortColumnIndex = columnIndex;
-                        isAscending = asceding;
-                      });
-                    },
-                    label: Row(children: const [
-                      Text("Tipo "),
-                      Icon(Icons.local_dining_outlined)
-                    ]),
-                  ),
-                  DataColumn(
-                    label: Row(children: const [
-                      Text("Local "),
-                      Icon(Icons.place_outlined)
-                    ]),
-                  ),
-                  DataColumn(
-                      label: Row(
-                    children: const [
-                      Text("Ações "),
-                      Icon(Icons.more_horiz_outlined)
-                    ],
-                  )),
-                ],
-                rows: rows,
               ),
             ),
           );
