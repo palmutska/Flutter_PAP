@@ -98,6 +98,13 @@ class _SelectionAreaState extends State<SelectionArea> {
     });
   }
 
+  bool checkIfQuarta() {
+    for (var data in datas) {
+      if (data.weekday != 3) return true;
+    }
+    return false;
+  }
+
   void confirmBooking() async {
     DatabaseReference ref =
         FirebaseDatabase.instance.ref("server/bookings/" + currentCard);
@@ -114,6 +121,7 @@ class _SelectionAreaState extends State<SelectionArea> {
               'local': booking.local,
               'tipo': booking.tipo,
             });
+            //TODO FIX TICKETS BUG
             if (int.parse(snapshot.value.toString()) > 0) {
               refUser.child("tickets").set(ServerValue.increment(-1));
             } else {
@@ -303,7 +311,32 @@ class _SelectionAreaState extends State<SelectionArea> {
                               primary: Colors.green,
                             ),
                             onPressed: () {
-                              confirmBooking();
+                              //! ALUNOS SÓ PODEM MARCAR AS QUARTAS
+                              //! JANTAR APENAS
+                              //! SIGAAAAAAAAA
+                              Object? tipo;
+                              DatabaseReference userType = FirebaseDatabase
+                                  .instance
+                                  .ref('server/verifiedUsers/' +
+                                      currentCard +
+                                      "/type");
+                              userType.onValue.listen((DatabaseEvent event) {
+                                tipo = event.snapshot.value;
+                              });
+                              if (tipo.toString().toLowerCase() == "aluno" &&
+                                  checkIfQuarta()) {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => ShowPopup(
+                                    buildContext: context,
+                                    msg:
+                                        'Os aluno só podem marcar refeições às quartas-feiras',
+                                    title: 'Ops!',
+                                  ),
+                                );
+                              } else {
+                                confirmBooking();
+                              }
                             },
                             icon: const Icon(Icons.check_outlined),
                             label: const Text("Confirmar"),
