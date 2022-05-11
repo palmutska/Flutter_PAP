@@ -7,7 +7,6 @@ import 'package:app/widgets/booking/selections/meal_type_select.dart';
 import 'package:app/widgets/datepicker.dart';
 import 'package:app/widgets/booking/options_top_text.dart';
 import 'package:app/widgets/global/popup.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 
@@ -106,68 +105,64 @@ class _SelectionAreaState extends State<SelectionArea> {
   }
 
   void confirmBooking() async {
+    int tickets = 0;
     DatabaseReference ref =
         FirebaseDatabase.instance.ref("server/bookings/" + currentCard);
     DatabaseReference refUser =
         FirebaseDatabase.instance.ref("server/verifiedUsers/" + currentCard);
 
     final snapshot = await refUser.child('tickets').get();
+    tickets = int.parse(snapshot.value.toString());
     if (snapshot.exists) {
-      if (int.parse(snapshot.value.toString()) >= bookingList.length) {
-        try {
-          for (var data in datas) {
-            ref.push().set({
-              'data': data.toString(),
-              'local': booking.local,
-              'tipo': booking.tipo,
-            });
-            //TODO FIX TICKETS BUG
-            if (int.parse(snapshot.value.toString()) > 0) {
-              refUser.child("tickets").set(ServerValue.increment(-1));
-            } else {
-              refUser.child("tickets").update({"tickets": 0});
-            }
-          }
-          showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: const Text("Confirmado!"),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(bookingList.length > 1
-                      ? "Refeições marcadas com sucesso!"
-                      : "Refeição marcada com sucesso!"),
-                ],
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    setState(() {
-                      bookingList.clear();
-                      _index = 0;
-                      datas = [];
-                      isAnySelected = false;
-                    });
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('Fechar'),
-                ),
+      if (tickets >= bookingList.length) {
+        for (var data in datas) {
+          ref.push().set({
+            'data': data.toString(),
+            'local': booking.local,
+            'tipo': booking.tipo,
+          });
+        }
+        refUser.child("tickets").set(tickets - bookingList.length);
+
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text("Confirmado!"),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(bookingList.length > 1
+                    ? "Refeições marcadas com sucesso!"
+                    : "Refeição marcada com sucesso!"),
               ],
             ),
-          );
-        } catch (e) {
-          if (kDebugMode) {
-            print("Erro: " + e.toString());
-          }
-        }
+            actions: [
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    bookingList.clear();
+                    _index = 0;
+                    datas = [];
+                    isAnySelected = false;
+                  });
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Fechar'),
+              ),
+            ],
+          ),
+        );
       } else {
         showDialog(
           context: context,
           builder: (context) => ShowPopup(
             buildContext: context,
-            msg: 'Não tens tickets suficientes!',
+            msg: ((bookingList.length - tickets) > 1
+                ? "Faltam " +
+                    (bookingList.length - tickets).toString() +
+                    " tickets para poderes marcar!."
+                : "Falta 1 ticket para poderes marcar!"),
             title: 'Ops!',
           ),
         );
