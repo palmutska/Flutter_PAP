@@ -1,3 +1,4 @@
+import 'package:app/models/user.dart';
 import 'package:app/routes/routes.dart';
 import 'package:app/routes/routes_generator.dart';
 import 'package:app/views/home_page.dart';
@@ -7,6 +8,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 String currentCard = "null";
+User user = User();
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -16,6 +18,33 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  Future<User> getUser() async {
+    String name, num, regime, tickets, type, nif, vegetariano, dieta;
+
+    final ref =
+        FirebaseDatabase.instance.ref("server/verifiedUsers/" + currentCard);
+
+    final snapshot = await ref.get();
+    name = snapshot.child("name").value.toString();
+    num = snapshot.child("num").value.toString();
+    regime = snapshot.child("regime").value.toString();
+    tickets = snapshot.child("tickets").value.toString();
+    type = snapshot.child("type").value.toString();
+    nif = snapshot.child("nif").value.toString();
+    vegetariano = snapshot.child("vegetariano").value.toString();
+    dieta = snapshot.child("dieta").value.toString();
+    User user = User(
+        name: name,
+        nif: nif,
+        num: num,
+        regime: regime,
+        tickets: tickets,
+        type: type,
+        vegetariano: vegetariano,
+        dieta: dieta);
+    return user;
+  }
+
   @override
   Widget build(BuildContext context) {
     DatabaseReference refCurrentCard =
@@ -42,15 +71,25 @@ class _LoginPageState extends State<LoginPage> {
     if (currentCard == "null") {
       return const HomePage();
     } else if (users.contains(currentCard)) {
-      return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Refeições',
-        builder: (_, child) => AppView(
-          child: child!,
-        ),
-        initialRoute: routeBooking,
-        navigatorKey: navKey,
-        onGenerateRoute: RouteGenerator.generateRoute,
+      return FutureBuilder(
+        future: getUser(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            user = snapshot.data as User;
+            return MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: 'Refeições',
+              builder: (_, child) => AppView(
+                child: child!,
+              ),
+              initialRoute: routeBooking,
+              navigatorKey: navKey,
+              onGenerateRoute: RouteGenerator.generateRoute,
+            );
+          } else {
+            return const HomePage();
+          }
+        },
       );
     } else {
       return const RegisterCard();

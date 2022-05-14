@@ -20,10 +20,10 @@ class _ConfirmOptionsState extends State<ConfirmOptions> {
               Text(dateFormatter.format(value.data!)),
             ),
             DataCell(
-              Text(value.local == "primeira" ? "1ª secção" : "2ª secção"),
+              Text(value.tipo == "almoco" ? "Almoço" : "Jantar"),
             ),
             DataCell(
-              Text(value.tipo == "almoco" ? "Almoço" : "Jantar"),
+              Text(value.local == "primeira" ? "1ª secção" : "2ª secção"),
             ),
             DataCell(
               Text(value.especial == "normal"

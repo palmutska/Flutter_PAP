@@ -98,10 +98,22 @@ class _SelectionAreaState extends State<SelectionArea> {
   }
 
   bool checkIfQuarta() {
-    for (var data in datas) {
-      if (data.weekday != 3) return true;
+    for (var booking in bookingList) {
+      if (booking.data!.weekday != 3) {
+        print(booking.data!.weekday);
+        return false;
+      }
     }
-    return false;
+    return true;
+  }
+
+  bool checkIfOnlyJantar() {
+    for (var booking in bookingList) {
+      if (booking.tipo.toString().toLowerCase() != "jantar") {
+        return false;
+      }
+    }
+    return true;
   }
 
   void confirmBooking() async {
@@ -306,9 +318,6 @@ class _SelectionAreaState extends State<SelectionArea> {
                               primary: Colors.green,
                             ),
                             onPressed: () {
-                              //! ALUNOS SÓ PODEM MARCAR AS QUARTAS
-                              //! JANTAR APENAS
-                              //! SIGAAAAAAAAA
                               Object? tipo;
                               DatabaseReference userType = FirebaseDatabase
                                   .instance
@@ -318,17 +327,70 @@ class _SelectionAreaState extends State<SelectionArea> {
                               userType.onValue.listen((DatabaseEvent event) {
                                 tipo = event.snapshot.value;
                               });
-                              if (tipo.toString().toLowerCase() == "aluno" &&
-                                  checkIfQuarta()) {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) => ShowPopup(
-                                    buildContext: context,
-                                    msg:
-                                        'Os aluno só podem marcar refeições às quartas-feiras',
-                                    title: 'Ops!',
-                                  ),
-                                );
+                              print(tipo.toString());
+                              //tem de ser aluno, so pode marcacoes quartas e jantares
+                              if (tipo.toString().toLowerCase() == "aluno") {
+                                if (checkIfQuarta() && checkIfOnlyJantar()) {
+                                  confirmBooking();
+                                } else {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: const Text(
+                                            'Ops!',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          content: SingleChildScrollView(
+                                            child: ListBody(
+                                              children: [
+                                                RichText(
+                                                  text: const TextSpan(
+                                                    style:
+                                                        TextStyle(fontSize: 15),
+                                                    children: [
+                                                      TextSpan(
+                                                          text:
+                                                              "Os alunos só podem marcar\n"),
+                                                      TextSpan(
+                                                          text: "jantar(es) ",
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold)),
+                                                      TextSpan(text: "ás "),
+                                                      TextSpan(
+                                                          text:
+                                                              "quarta(s)-feira(s)",
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold)),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          actions: [
+                                            ElevatedButton.icon(
+                                              style: ButtonStyle(
+                                                backgroundColor:
+                                                    MaterialStateProperty.all(
+                                                  Colors.green,
+                                                ),
+                                              ),
+                                              label: const Text("Confirmar"),
+                                              icon: const Icon(Icons.done),
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                            ),
+                                          ],
+                                        );
+                                      });
+                                }
                               } else {
                                 confirmBooking();
                               }
