@@ -13,9 +13,6 @@ class ListPage extends StatefulWidget {
 }
 
 class _ListPage extends State<ListPage> {
-  int? sortColumnIndex;
-  bool isAscending = false;
-
   Future getData() async {
     var ref =
         FirebaseDatabase.instance.ref("server/bookings/" + currentCard + "/");
@@ -48,8 +45,7 @@ class _ListPage extends State<ListPage> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator();
         }
-        if (snapshot.hasData &&
-            (snapshot.data! as Map<String, Meal>).isNotEmpty) {
+        if (snapshot.hasData) {
           Map<String, Meal> list = snapshot.data! as Map<String, Meal>;
           if (list.isNotEmpty) {
             for (var k in list.keys) {
@@ -105,7 +101,7 @@ class _ListPage extends State<ListPage> {
                               onPressed: () {
                                 Navigator.of(context).pop();
                                 if (DateTime.now()
-                                    .add(const Duration(days: 2))
+                                    .add(const Duration(days: 1, hours: 12))
                                     .isBefore(list[k]!.data!)) {
                                   setState(() {
                                     list.remove(list[k]);
@@ -160,8 +156,6 @@ class _ListPage extends State<ListPage> {
                   border: TableBorder.symmetric(
                     inside: const BorderSide(width: 1),
                   ),
-                  sortAscending: isAscending,
-                  sortColumnIndex: sortColumnIndex,
                   columns: [
                     DataColumn(
                       label: Row(children: const [
@@ -170,13 +164,6 @@ class _ListPage extends State<ListPage> {
                       ]),
                     ),
                     DataColumn(
-                      onSort: (columnIndex, asceding) {
-                        //? Tentar fazer o sort
-                        setState(() {
-                          sortColumnIndex = columnIndex;
-                          isAscending = asceding;
-                        });
-                      },
                       label: Row(children: const [
                         Text("Tipo "),
                         Icon(Icons.local_dining_outlined)
