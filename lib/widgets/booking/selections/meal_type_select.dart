@@ -70,11 +70,12 @@ class _SelectMealTypeState extends State<SelectMealType> {
                     context: context,
                     builder: (context) {
                       return ShowPopup(
-                        buildContext: context,
-                        title: "Ops",
-                        msg:
-                            "Não tens permissão para marcar\neste tipo de refeições",
-                      );
+                          buildContext: context,
+                          title: "Ops",
+                          msg: const TextSpan(
+                            text:
+                                "Não tens permissão para marcar\neste tipo de refeições",
+                          ));
                     },
                   );
                 }
@@ -119,8 +120,10 @@ class _SelectMealTypeState extends State<SelectMealType> {
                       return ShowPopup(
                         buildContext: context,
                         title: "Ops",
-                        msg:
-                            "Não tens permissão para marcar\neste tipo de refeições",
+                        msg: const TextSpan(
+                          text:
+                              "Não tens permissão para marcar\neste tipo de refeições",
+                        ),
                       );
                     },
                   );

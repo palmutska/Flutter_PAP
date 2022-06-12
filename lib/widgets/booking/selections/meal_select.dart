@@ -62,7 +62,8 @@ class _SelectMealState extends State<SelectMeal> {
                 context: context,
                 builder: (context) => ShowPopup(
                   buildContext: context,
-                  msg: 'Não é possivel jantar na segunda secção.',
+                  msg: const TextSpan(
+                      text: "Não é possivel jantar na segunda secção."),
                   title: 'Ops!',
                 ),
               );

@@ -117,8 +117,9 @@ class _ListPage extends State<ListPage> {
                                     context: context,
                                     builder: (context) => ShowPopup(
                                       buildContext: context,
-                                      msg:
-                                          'Já passou o tempo limite para desmarcar esta refeição!',
+                                      msg: const TextSpan(
+                                          text:
+                                              'Já passou o tempo limite para desmarcar esta refeição!'),
                                       title: 'Ops!',
                                     ),
                                   );

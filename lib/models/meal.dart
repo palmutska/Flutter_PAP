@@ -1,5 +1,4 @@
 // ignore_for_file: unnecessary_getters_setters
-
 class Meal {
   DateTime? _data;
   String? _local;

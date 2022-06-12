@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 class ShowPopup extends StatefulWidget {
   final BuildContext buildContext;
-  final String title, msg;
+  final String title;
+  final TextSpan msg;
   const ShowPopup(
       {Key? key,
       required this.buildContext,
@@ -27,9 +28,7 @@ class _ShowPopupState extends State<ShowPopup> {
           children: [
             RichText(
               text: TextSpan(
-                style: const TextStyle(fontSize: 15),
-                text: widget.msg,
-              ),
+                  style: const TextStyle(fontSize: 16), children: [widget.msg]),
             ),
           ],
         ),

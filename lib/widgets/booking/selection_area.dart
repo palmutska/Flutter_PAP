@@ -8,6 +8,7 @@ import 'package:app/widgets/datepicker.dart';
 import 'package:app/widgets/booking/options_top_text.dart';
 import 'package:app/widgets/global/popup.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 Meal booking = Meal();
@@ -41,7 +42,7 @@ class _SelectionAreaState extends State<SelectionArea> {
           context: context,
           builder: (context) => ShowPopup(
             buildContext: context,
-            msg: 'Selecione uma das opções.',
+            msg: const TextSpan(text: 'Selecione uma das opções.'),
             title: 'Ops!',
           ),
         );
@@ -58,7 +59,7 @@ class _SelectionAreaState extends State<SelectionArea> {
               context: context,
               builder: (context) => ShowPopup(
                 buildContext: context,
-                msg: 'Selecione uma opção.',
+                msg: const TextSpan(text: 'Selecione uma opção.'),
                 title: 'Ops!',
               ),
             );
@@ -68,7 +69,7 @@ class _SelectionAreaState extends State<SelectionArea> {
             context: context,
             builder: (context) => ShowPopup(
               buildContext: context,
-              msg: 'Selecione uma data.',
+              msg: const TextSpan(text: 'Selecione uma data.'),
               title: 'Ops!',
             ),
           );
@@ -100,7 +101,6 @@ class _SelectionAreaState extends State<SelectionArea> {
   bool checkIfQuarta() {
     for (var booking in bookingList) {
       if (booking.data!.weekday != 3) {
-        print(booking.data!.weekday);
         return false;
       }
     }
@@ -116,68 +116,136 @@ class _SelectionAreaState extends State<SelectionArea> {
     return true;
   }
 
+  List<Meal> checkIfMealDuplicated(List restrictedBookings, List bookings) {
+    List<Meal> duplicatedBookings = [];
+    for (Meal restrictedBooking in restrictedBookings) {
+      for (Meal booking in bookings) {
+        if (restrictedBooking.data == booking.data &&
+            restrictedBooking.local == booking.local &&
+            restrictedBooking.tipo == booking.tipo) {
+          duplicatedBookings.add(booking);
+        }
+      }
+    }
+    return duplicatedBookings;
+  }
+
+  List<TextSpan> createDuplicatedMealText(List<Meal> duplicated) {
+    final DateFormat formatter = DateFormat('dd-MM-yyyy');
+    List<TextSpan> list = [];
+    for (var dup in duplicated) {
+      list.add(
+        TextSpan(
+          style: const TextStyle(fontWeight: FontWeight.bold),
+          text: formatter.format(dup.data!) +
+              " | " +
+              (dup.local! == "primeira" ? "1ª secção" : "2ª secção") +
+              " | " +
+              (dup.tipo! == "almoco" ? "Almoço\n" : "Jantar\n"),
+        ),
+      );
+    }
+    return list;
+  }
+
   void confirmBooking() async {
     int tickets = 0;
     DatabaseReference ref =
         FirebaseDatabase.instance.ref("server/bookings/" + currentCard);
     DatabaseReference refUser =
         FirebaseDatabase.instance.ref("server/verifiedUsers/" + currentCard);
+    DatabaseReference refBookings =
+        FirebaseDatabase.instance.ref("server/bookings/" + currentCard);
 
-    final snapshot = await refUser.child('tickets').get();
-    tickets = int.parse(snapshot.value.toString());
-    if (snapshot.exists) {
-      if (tickets >= bookingList.length) {
-        for (var data in datas) {
-          ref.push().set({
-            'data': data.toString(),
-            'local': booking.local,
-            'tipo': booking.tipo,
-          });
-        }
-        refUser.child("tickets").set(tickets - bookingList.length);
+    final snapshotTickets = await refUser.child('tickets').get();
+    final snapshotBookings = await refBookings.get();
 
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: const Text("Confirmado!"),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(bookingList.length > 1
-                    ? "Refeições marcadas com sucesso!"
-                    : "Refeição marcada com sucesso!"),
+    var restrictedBookings = [];
+
+    for (var restrictedBooking in snapshotBookings.children) {
+      Meal pivot = Meal(
+        data: DateTime.parse(restrictedBooking.child("data").value.toString()),
+        especial: restrictedBooking.child("tipo").value.toString(),
+        local: restrictedBooking.child("local").value.toString(),
+        tipo: restrictedBooking.child("refeicao").value.toString(),
+      );
+      restrictedBookings.add(pivot);
+    }
+
+    List<Meal> duplicated =
+        checkIfMealDuplicated(restrictedBookings, bookingList);
+
+    if (duplicated.isNotEmpty) {
+      showDialog(
+        context: context,
+        builder: (context) => ShowPopup(
+          buildContext: context,
+          msg: TextSpan(
+            text: duplicated.length == 1
+                ? "Esta refeição já esta marcada:\n\n"
+                : "Estas refeições já estão marcadas:\n\n",
+            children: createDuplicatedMealText(duplicated),
+          ),
+          title: 'Ops!',
+        ),
+      );
+    } else {
+      tickets = int.parse(snapshotTickets.value.toString());
+      if (snapshotTickets.exists) {
+        if (tickets >= bookingList.length) {
+          for (var data in datas) {
+            ref.push().set({
+              'data': data.toString(),
+              'local': booking.local,
+              'tipo': booking.tipo,
+            });
+          }
+          refUser.child("tickets").set(tickets - bookingList.length);
+
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text("Confirmado!"),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(bookingList.length > 1
+                      ? "Refeições marcadas com sucesso!"
+                      : "Refeição marcada com sucesso!"),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      bookingList.clear();
+                      _index = 0;
+                      datas = [];
+                      isAnySelected = false;
+                    });
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('Fechar'),
+                ),
               ],
             ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    bookingList.clear();
-                    _index = 0;
-                    datas = [];
-                    isAnySelected = false;
-                  });
-                  Navigator.of(context).pop();
-                },
-                child: const Text('Fechar'),
-              ),
-            ],
-          ),
-        );
-      } else {
-        showDialog(
-          context: context,
-          builder: (context) => ShowPopup(
-            buildContext: context,
-            msg: ((bookingList.length - tickets) > 1
-                ? "Faltam " +
-                    (bookingList.length - tickets).toString() +
-                    " tickets para poderes marcar!."
-                : "Falta 1 ticket para poderes marcar!"),
-            title: 'Ops!',
-          ),
-        );
+          );
+        } else {
+          showDialog(
+            context: context,
+            builder: (context) => ShowPopup(
+              buildContext: context,
+              msg: TextSpan(
+                  text: ((bookingList.length - tickets) > 1
+                      ? "Faltam " +
+                          (bookingList.length - tickets).toString() +
+                          " tickets para poderes marcar!."
+                      : "Falta 1 ticket para poderes marcar!")),
+              title: 'Ops!',
+            ),
+          );
+        }
       }
     }
   }
@@ -327,8 +395,6 @@ class _SelectionAreaState extends State<SelectionArea> {
                               userType.onValue.listen((DatabaseEvent event) {
                                 tipo = event.snapshot.value;
                               });
-                              print(tipo.toString());
-                              //tem de ser aluno, so pode marcacoes quartas e jantares
                               if (tipo.toString().toLowerCase() == "aluno") {
                                 if (checkIfQuarta() && checkIfOnlyJantar()) {
                                   confirmBooking();

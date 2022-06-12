@@ -67,7 +67,7 @@ class _RegisterCardState extends State<RegisterCard> {
         context: context,
         builder: (context) => ShowPopup(
           buildContext: context,
-          msg: 'Este cartão foi registado com sucesso!',
+          msg: const TextSpan(text: 'Este cartão foi registado com sucesso!'),
           title: 'Registro',
         ),
       ).then((value) => refCurrentCard.update({"currentCard": "null"}));
@@ -76,7 +76,8 @@ class _RegisterCardState extends State<RegisterCard> {
         context: context,
         builder: (context) => ShowPopup(
           buildContext: context,
-          msg: 'Este código não está associado a nenhuma conta!\n',
+          msg: const TextSpan(
+              text: "Este código não está associado a nenhuma conta!\n"),
           title: 'Ops!',
         ),
       );
