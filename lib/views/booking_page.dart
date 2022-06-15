@@ -48,9 +48,9 @@ class _BookingPageState extends State<BookingPage> {
                             content: FutureBuilder(
                               future: getUrl(),
                               builder: (context, snapshot) {
-                                if (snapshot.hasError) {
-                                  return const Text(
-                                      "Erro ao carregar a ementa, tente de novo");
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const CircularProgressIndicator();
                                 }
                                 if (snapshot.hasData) {
                                   return SizedBox(
@@ -63,9 +63,9 @@ class _BookingPageState extends State<BookingPage> {
                                       ),
                                     ),
                                   );
+                                } else {
+                                  return Text("Erro ao carregar");
                                 }
-                                //! Meter o indicador + pequeno
-                                return const CircularProgressIndicator();
                               },
                             ),
                             actions: [

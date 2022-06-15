@@ -47,7 +47,7 @@ class RouteGenerator {
       case routeListBooking:
         return PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) =>
-              const ListPage(),
+              const ListBookings(),
           transitionDuration: const Duration(milliseconds: 450),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return SlideTransition(
