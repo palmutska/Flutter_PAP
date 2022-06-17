@@ -276,7 +276,13 @@ class _ListBookingsState extends State<ListBookings> {
                     ],
                   );
                 } else {
-                  return const Text("Não tens marcações");
+                  return const Text(
+                    "Não tens marcações!",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold),
+                  );
                 }
               })
         ],

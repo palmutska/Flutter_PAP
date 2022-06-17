@@ -1,6 +1,7 @@
 import 'package:app/models/user.dart';
 import 'package:app/utils/type_img.dart';
 import 'package:app/views/login_page.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 class AccountData extends StatefulWidget {
@@ -11,7 +12,16 @@ class AccountData extends StatefulWidget {
 }
 
 class _AccountDataState extends State<AccountData> {
-  List<TextSpan> showUser(User user) {
+  Future<String> getTickets() async {
+    final ref = FirebaseDatabase.instance
+        .ref("server/verifiedUsers/" + currentCard + "/tickets");
+
+    final snapshot = await ref.get();
+
+    return snapshot.value.toString();
+  }
+
+  List<TextSpan> showUser(User user, String tickets) {
     List<TextSpan> text = [];
     text.add(TextSpan(children: [
       TextSpan(
@@ -40,8 +50,9 @@ class _AccountDataState extends State<AccountData> {
         ))
       ]));
     }
+
     text.add(TextSpan(children: [
-      TextSpan(text: "\nTickets: " + user.tickets.toString() + " "),
+      TextSpan(text: "\nTickets: " + tickets + " "),
       const WidgetSpan(
           child: Icon(
         Icons.confirmation_num_outlined,
@@ -49,6 +60,7 @@ class _AccountDataState extends State<AccountData> {
         size: 32,
       ))
     ]));
+
     text.add(TextSpan(children: [
       const TextSpan(text: "\nDieta: "),
       WidgetSpan(
@@ -96,15 +108,22 @@ class _AccountDataState extends State<AccountData> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           TypeImage(user),
-          RichText(
-            text: TextSpan(
-              style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold),
-              children: showUser(user),
-            ),
-          ),
+          FutureBuilder(
+              future: getTickets(),
+              builder: ((context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                }
+                return RichText(
+                  text: TextSpan(
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold),
+                    children: showUser(user, snapshot.data.toString()),
+                  ),
+                );
+              })),
         ],
       ),
     );

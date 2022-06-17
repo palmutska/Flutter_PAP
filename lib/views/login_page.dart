@@ -19,7 +19,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   Future<User> getUser() async {
-    String name, num, regime, tickets, type, nif, vegetariano, dieta;
+    String name, num, regime, type, nif, vegetariano, dieta;
 
     final ref =
         FirebaseDatabase.instance.ref("server/verifiedUsers/" + currentCard);
@@ -28,7 +28,6 @@ class _LoginPageState extends State<LoginPage> {
     name = snapshot.child("name").value.toString();
     num = snapshot.child("num").value.toString();
     regime = snapshot.child("regime").value.toString();
-    tickets = snapshot.child("tickets").value.toString();
     type = snapshot.child("type").value.toString();
     nif = snapshot.child("nif").value.toString();
     vegetariano = snapshot.child("vegetariano").value.toString();
@@ -38,7 +37,6 @@ class _LoginPageState extends State<LoginPage> {
         nif: nif,
         num: num,
         regime: regime,
-        tickets: tickets,
         type: type,
         vegetariano: vegetariano,
         dieta: dieta);

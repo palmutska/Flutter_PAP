@@ -11,9 +11,7 @@ class BookingPage extends StatefulWidget {
 
 class _BookingPageState extends State<BookingPage> {
   Future<String> getUrl() {
-    final ref = FirebaseStorage.instance
-        .ref()
-        .child('Ementa-IPE-Marco_004-768x1087.jpg');
+    final ref = FirebaseStorage.instance.ref().child('ementa');
 
     Future<String> url = ref.getDownloadURL();
     return url;
@@ -50,7 +48,11 @@ class _BookingPageState extends State<BookingPage> {
                               builder: (context, snapshot) {
                                 if (snapshot.connectionState ==
                                     ConnectionState.waiting) {
-                                  return const CircularProgressIndicator();
+                                  return const SizedBox(
+                                    width: 150,
+                                    height: 150,
+                                    child: CircularProgressIndicator(),
+                                  );
                                 }
                                 if (snapshot.hasData) {
                                   return SizedBox(
@@ -64,7 +66,7 @@ class _BookingPageState extends State<BookingPage> {
                                     ),
                                   );
                                 } else {
-                                  return Text("Erro ao carregar");
+                                  return const Text("Erro ao carregar");
                                 }
                               },
                             ),
