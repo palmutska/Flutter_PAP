@@ -38,6 +38,17 @@ class _AccountDataState extends State<AccountData> {
         size: 32,
       ))
     ]));
+    if (user.type.toString().toLowerCase() == "aluno") {
+      text.add(TextSpan(children: [
+        TextSpan(text: "\nRegime: " + user.regime.toString() + " "),
+        const WidgetSpan(
+            child: Icon(
+          Icons.house_outlined,
+          color: Colors.white,
+          size: 32,
+        ))
+      ]));
+    }
 
     if (user.type.toString().toLowerCase() == "militar") {
       text.add(TextSpan(children: [

@@ -386,17 +386,13 @@ class _SelectionAreaState extends State<SelectionArea> {
                               primary: Colors.green,
                             ),
                             onPressed: () {
-                              Object? tipo;
-                              DatabaseReference userType = FirebaseDatabase
-                                  .instance
-                                  .ref('server/verifiedUsers/' +
-                                      currentCard +
-                                      "/type");
-                              userType.onValue.listen((DatabaseEvent event) {
-                                tipo = event.snapshot.value;
-                              });
-                              if (tipo.toString().toLowerCase() == "aluno") {
-                                if (checkIfQuarta() && checkIfOnlyJantar()) {
+                              if (user.type.toString().toLowerCase() ==
+                                  "aluno") {
+                                if ((user.regime == "Interno" &&
+                                        checkIfOnlyJantar() &&
+                                        checkIfQuarta()) ||
+                                    user.regime == "Externo" &&
+                                        checkIfOnlyJantar()) {
                                   confirmBooking();
                                 } else {
                                   showDialog(
@@ -412,24 +408,41 @@ class _SelectionAreaState extends State<SelectionArea> {
                                             child: ListBody(
                                               children: [
                                                 RichText(
-                                                  text: const TextSpan(
-                                                    style:
-                                                        TextStyle(fontSize: 15),
+                                                  text: TextSpan(
+                                                    style: const TextStyle(
+                                                        fontSize: 15),
                                                     children: [
+                                                      const TextSpan(
+                                                          text: "Os alunos "),
                                                       TextSpan(
+                                                          text: user.regime ==
+                                                                  "Interno"
+                                                              ? "internos"
+                                                              : "externos",
+                                                          style: const TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold)),
+                                                      const TextSpan(
                                                           text:
-                                                              "Os alunos só podem marcar\n"),
-                                                      TextSpan(
+                                                              " só podem marcar\n"),
+                                                      const TextSpan(
                                                           text: "jantar(es) ",
                                                           style: TextStyle(
                                                               fontWeight:
                                                                   FontWeight
                                                                       .bold)),
-                                                      TextSpan(text: "ás "),
                                                       TextSpan(
-                                                          text:
-                                                              "quarta(s)-feira(s)",
-                                                          style: TextStyle(
+                                                          text: user.regime ==
+                                                                  "Interno"
+                                                              ? " ás"
+                                                              : ""),
+                                                      TextSpan(
+                                                          text: user.regime ==
+                                                                  "Interno"
+                                                              ? "quarta(s)-feira(s)"
+                                                              : "",
+                                                          style: const TextStyle(
                                                               fontWeight:
                                                                   FontWeight
                                                                       .bold)),
