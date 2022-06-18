@@ -116,11 +116,25 @@ class _ListBookingsState extends State<ListBookings> {
                                     label: const Text("Confirmar"),
                                     icon: const Icon(Icons.check_box_outlined),
                                     onPressed: () {
+                                      DatabaseReference refLogs =
+                                          FirebaseDatabase.instance
+                                              .ref("server/logs/");
+
                                       Navigator.of(context).pop();
                                       if (DateTime.now()
                                           .add(const Duration(
                                               days: 1, hours: 12))
                                           .isBefore(list[k]!.data!)) {
+                                        refLogs.push().set({
+                                          'timestamp': DateTime.now()
+                                              .millisecondsSinceEpoch,
+                                          'event': "bookingDeleted",
+                                          'userName': user.name,
+                                          'userNIF': user.nif,
+                                          'userCardID': currentCard,
+                                          'msg':
+                                              "O utilizador desmarcou uma refeição"
+                                        });
                                         setState(() {
                                           list.remove(list[k]);
                                           FirebaseDatabase.instance

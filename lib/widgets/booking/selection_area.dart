@@ -156,6 +156,7 @@ class _SelectionAreaState extends State<SelectionArea> {
         FirebaseDatabase.instance.ref("server/verifiedUsers/" + currentCard);
     DatabaseReference refBookings =
         FirebaseDatabase.instance.ref("server/bookings/" + currentCard);
+    DatabaseReference refLogs = FirebaseDatabase.instance.ref("server/logs/");
 
     final snapshotTickets = await refUser.child('tickets').get();
     final snapshotBookings = await refBookings.get();
@@ -201,6 +202,17 @@ class _SelectionAreaState extends State<SelectionArea> {
             });
           }
           refUser.child("tickets").set(tickets - bookingList.length);
+
+          refLogs.push().set({
+            'timestamp': DateTime.now().millisecondsSinceEpoch,
+            'event': "bookingCreated",
+            'userName': user.name,
+            'userNIF': user.nif,
+            'userCardID': currentCard,
+            'msg': "O utilizador marcou " +
+                bookingList.length.toString() +
+                (bookingList.length == 1 ? " refeição" : " refeições"),
+          });
 
           showDialog(
             context: context,
