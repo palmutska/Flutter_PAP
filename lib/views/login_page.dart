@@ -24,6 +24,8 @@ class _LoginPageState extends State<LoginPage> {
     final ref =
         FirebaseDatabase.instance.ref("server/verifiedUsers/" + currentCard);
 
+    final refLogs = FirebaseDatabase.instance.ref("server/logs/");
+
     final snapshot = await ref.get();
     name = snapshot.child("name").value.toString();
     num = snapshot.child("num").value.toString();
@@ -40,6 +42,16 @@ class _LoginPageState extends State<LoginPage> {
         type: type,
         vegetariano: vegetariano,
         dieta: dieta);
+
+    refLogs.push().set({
+      'timestamp': DateTime.now().millisecondsSinceEpoch,
+      'event': "userLogin",
+      'userName': name,
+      'userNIF': nif,
+      'userCardID': currentCard,
+      'msg': "O utilizador entrou na conta",
+    });
+
     return user;
   }
 
