@@ -35,11 +35,13 @@ class _RegisterCardState extends State<RegisterCard> {
     });
   }
 
+  //TODO FutureBuilder!!!
   void onSubmit() {
     Map<String, dynamic> unverifiedUsers = {};
 
     DatabaseReference refUnverifiedUsers =
         FirebaseDatabase.instance.ref("server/unverifiedUsers");
+    DatabaseReference refLogs = FirebaseDatabase.instance.ref("server/logs/");
 
     DatabaseReference refCurrentCard = FirebaseDatabase.instance.ref("server");
 
@@ -63,6 +65,14 @@ class _RegisterCardState extends State<RegisterCard> {
         user.type = value["type"].toString();
       });
       unverifiedToVerified(user);
+      refLogs.push().set({
+        'timestamp': DateTime.now().millisecondsSinceEpoch,
+        'event': "cardRegisted",
+        'userName': user.name,
+        'userNIF': user.nif,
+        'userCardID': currentCard,
+        'msg': "O utilizador registou o cartão",
+      });
       showDialog(
         context: context,
         builder: (context) => ShowPopup(
@@ -91,7 +101,9 @@ class _RegisterCardState extends State<RegisterCard> {
         children: [
           const Background(),
           const LogoIPE(),
-          ExitButton(),
+          ExitButton(
+            updateLog: false,
+          ),
           Center(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,

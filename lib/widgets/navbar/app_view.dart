@@ -25,7 +25,9 @@ class AppView extends StatelessWidget {
                   Expanded(child: child),
                 ],
               ),
-              ExitButton(),
+              ExitButton(
+                updateLog: true,
+              ),
               const LogoIPE(),
             ],
           ),
